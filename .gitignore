@@ -3,7 +3,6 @@
 *.o
 Makefile
 blib/
-README.md
 *.gz
 CSS-*
 .gitignore
