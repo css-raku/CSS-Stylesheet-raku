@@ -1,6 +1,8 @@
 Revision history for CSS-Stylesheet
 
 {{$NEXT}}
+
+0.0.18  2021-05-13T08:47:25+12:00
     - Add POD documentation + generated markdown in docs/ directory
 
 0.0.17  2021-05-06T08:30:25+12:00

@@ -1,5 +1,5 @@
 #| Overall CSS Stylesheet representation
-unit class CSS::Stylesheet:ver<0.0.17>;
+unit class CSS::Stylesheet:ver<0.0.18>;
 
 use CSS::Media;
 use CSS::Module:CSS3;
