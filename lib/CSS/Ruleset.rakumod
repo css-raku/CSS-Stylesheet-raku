@@ -45,10 +45,6 @@ method Str(:$optimize = True, :$terse = True, *%opt --> Str) {
 
 =begin pod
 
-=head2 Name
-
-CSS::Ruleset
-
 =head2 Synopsis
 
     use CSS::Ruleset;

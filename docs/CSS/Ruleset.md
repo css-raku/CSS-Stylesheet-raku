@@ -7,11 +7,6 @@ class CSS::Ruleset
 
 CSS Rule-set representation
 
-Name
-----
-
-CSS::Ruleset
-
 Synopsis
 --------
 
