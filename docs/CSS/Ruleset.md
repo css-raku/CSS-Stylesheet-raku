@@ -1,6 +1,6 @@
 [[Raku CSS Project]](https://css-raku.github.io)
- / [[CSS-Selectors Module]](https://css-raku.github.io/CSS-Selectors-raku)
- / [CSS::Ruleset](https://css-raku.github.io/CSS-Selectors-raku/CSS/Ruleset)
+ / [[CSS-Stylesheet Module]](https://css-raku.github.io/CSS-Stylesheet-raku)
+ / [CSS::Ruleset](https://css-raku.github.io/CSS-Stylesheet-raku/CSS/Ruleset)
 
 class CSS::Ruleset
 ------------------

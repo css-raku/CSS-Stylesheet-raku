@@ -1,6 +1,6 @@
 [[Raku CSS Project]](https://css-raku.github.io)
- / [[CSS-Selectors Module]](https://css-raku.github.io/CSS-Selectors-raku)
- / [CSS::Stylesheet](https://css-raku.github.io/CSS-Selectors-raku/CSS/Stylesheet)
+ / [[CSS-Stylesheet Module]](https://css-raku.github.io/CSS-Stylesheet-raku)
+ / [CSS::Stylesheet](https://css-raku.github.io/CSS-Stylesheet-raku/CSS/Stylesheet)
 
 class CSS::Stylesheet
 ---------------------
