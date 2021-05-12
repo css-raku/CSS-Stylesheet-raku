@@ -1,7 +1,11 @@
-Name
-----
+[[Raku CSS Project]](https://css-raku.github.io)
+ / [[CSS-Selectors Module]](https://css-raku.github.io/CSS-Selectors-raku)
+ / [CSS::Media](https://css-raku.github.io/CSS-Selectors-raku/CSS/Media)
 
-CSS::Stylesheet::Media
+class CSS::Media
+----------------
+
+CSS Media representation
 
 Synopsis
 --------

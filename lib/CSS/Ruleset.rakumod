@@ -1,3 +1,4 @@
+#| CSS Rule-set representation
 unit class CSS::Ruleset;
 
 use CSS::Properties;

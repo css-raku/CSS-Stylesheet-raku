@@ -1,4 +1,4 @@
-#| selector component of rule-sets
+#| Selector component of rule-sets
 unit class CSS::Selectors;
 
 use CSS::Selector::To::XPath;

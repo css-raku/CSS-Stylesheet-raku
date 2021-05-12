@@ -1,7 +1,11 @@
+[[Raku CSS Project]](https://css-raku.github.io)
+ / [[CSS-Selectors Module]](https://css-raku.github.io/CSS-Selectors-raku)
+ / [CSS::Selectors](https://css-raku.github.io/CSS-Selectors-raku/CSS/Selectors)
+
 class CSS::Selectors
 --------------------
 
-selector component of rule-sets
+Selector component of rule-sets
 
 Methods
 -------

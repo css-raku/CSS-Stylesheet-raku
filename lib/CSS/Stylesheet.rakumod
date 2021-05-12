@@ -1,3 +1,4 @@
+#| Overall CSS Stylesheet representation
 unit class CSS::Stylesheet:ver<0.0.17>;
 
 use CSS::Media;
@@ -98,13 +99,9 @@ method Str(:$optimize = True, Bool :$terse = True, *%opt) is also<gist> {
 
 =begin pod
 
-=head2 Name
-
-CSS::Stylesheet - overall stylesheet
-
 =head2 Description
 
-This class is used to parse style-sheets and load rule-sets. Objects have an associated
+This class is used to parse style-sheet rule-sets. Objects have an associated
 media attributes which is used to filter `@media` rule-sets.
 
 =head2 Methods

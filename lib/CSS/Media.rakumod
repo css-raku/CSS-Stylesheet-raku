@@ -1,3 +1,4 @@
+#| CSS Media representation
 unit class CSS::Media;
 use CSS::Properties :&from-ast;
 use CSS::Units :Resolution, :Length, :dpi;
@@ -171,10 +172,6 @@ multi method query(Str:D $query) {
 }
 
 =begin pod
-
-=head2 Name
-
-CSS::Stylesheet::Media
 
 =head2 Synopsis
 
