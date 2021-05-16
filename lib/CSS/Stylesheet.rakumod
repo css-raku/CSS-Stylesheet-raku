@@ -2,6 +2,7 @@
 unit class CSS::Stylesheet:ver<0.0.18>;
 
 use CSS::Media;
+use CSS::AtPageRule;
 use CSS::Module:CSS3;
 use CSS::Ruleset;
 use CSS::Writer;
@@ -13,6 +14,7 @@ has CSS::Ruleset @.rules;
 has List %.rule-media{CSS::Ruleset};
 has Str $.charset = 'utf-8';
 has Exception @.warnings;
+has CSS::AtPageRule @.page;
 
 multi method load(:stylesheet($_)!) {
     $.load: |$_ for .list;
@@ -29,11 +31,15 @@ multi method at-rule('media', :@media-list, :@rule-list) {
     }
 }
 
+multi method at-rule('page', Str :$pseudo-class, List :$declarations) {
+    @!page.push: CSS::AtPageRule.new: :$pseudo-class, :$declarations;
+}
+
 multi method at-rule('include', |c) {
     warn 'todo: @include(...) at rules';
 }
 
-multi method at-rule($rule, |c) is default {
+multi method at-rule($rule, |c) {
     warn "ignoring \@$rule \{...\}";
 }
 

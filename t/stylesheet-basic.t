@@ -14,7 +14,7 @@ my $css = q:to<END>;
    border: 0px;
    color: #000;
    background: #fff;
-   }
+ }
  html, body, p, th, td, li, dd, dt {
    font: 1em Arial, Helvetica, sans-serif;
  }

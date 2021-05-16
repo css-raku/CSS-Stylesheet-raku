@@ -17,6 +17,7 @@
   "name": "CSS::Stylesheet",
   "perl": "6.c",
   "provides": {
+    "CSS::AtPageRule": "lib/CSS/AtPageRule.rakumod",
     "CSS::Media": "lib/CSS/Media.rakumod",
     "CSS::Ruleset": "lib/CSS/Ruleset.rakumod",
     "CSS::Selectors": "lib/CSS/Selectors.rakumod",
