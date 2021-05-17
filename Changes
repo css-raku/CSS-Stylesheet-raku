@@ -1,10 +1,13 @@
 Revision history for CSS-Stylesheet
 
 {{$NEXT}}
-    - Add CSS::AtPageRule and support for '@page' at-rules
+
+0.0.19  2021-05-18T11:55:31+12:00
+    - Add CSS::AtPageRule and support for '@page' at-rules, including
+      embedded margin boxes @page { ... @top-center{ ... } ... }
 
 0.0.18  2021-05-13T08:47:25+12:00
     - Add POD documentation + generated markdown in docs/ directory
 
 0.0.17  2021-05-06T08:30:25+12:00
-    - Initial release. Module factored out from CSS v0.1.16
+    - Initial release. Module factored out from CSS v0.0.16

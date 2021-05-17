@@ -1,5 +1,5 @@
 #| Overall CSS Stylesheet representation
-unit class CSS::Stylesheet:ver<0.0.18>;
+unit class CSS::Stylesheet:ver<0.0.19>;
 
 use CSS::Media;
 use CSS::AtPageRule;
