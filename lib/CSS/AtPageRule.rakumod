@@ -5,9 +5,20 @@ use CSS::Properties;
 
 has Str $.pseudo-class;
 has CSS::Properties $.properties is built;
+has CSS::Properties %.margin-box;
 
-submethod TWEAK(List :$declarations) {
-    $!properties .= new: :ast($_) with $declarations;
+submethod TWEAK(List:D :$declarations!) {
+    given $declarations {
+        $!properties .= new: :ast($_);
+        for $declarations.grep: {.<at-rule>:exists} {
+            # extract margin box
+            given .<at-rule> {
+                my Str:D $name = .<at-keyw>;
+                my List:D $ast = .<declarations>;
+                %!margin-box{$name} .= new: :$ast;
+            }
+        }
+    }
 }
 
 method Str is also<gist> {

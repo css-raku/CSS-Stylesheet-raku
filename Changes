@@ -1,6 +1,7 @@
 Revision history for CSS-Stylesheet
 
 {{$NEXT}}
+    - Add CSS::AtPageRule and support for '@page' at-rules
 
 0.0.18  2021-05-13T08:47:25+12:00
     - Add POD documentation + generated markdown in docs/ directory

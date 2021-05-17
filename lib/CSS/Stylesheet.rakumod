@@ -14,7 +14,7 @@ has CSS::Ruleset @.rules;
 has List %.rule-media{CSS::Ruleset};
 has Str $.charset = 'utf-8';
 has Exception @.warnings;
-has CSS::AtPageRule @.page;
+has CSS::AtPageRule @.at-pages;
 
 multi method load(:stylesheet($_)!) {
     $.load: |$_ for .list;
@@ -32,7 +32,7 @@ multi method at-rule('media', :@media-list, :@rule-list) {
 }
 
 multi method at-rule('page', Str :$pseudo-class, List :$declarations) {
-    @!page.push: CSS::AtPageRule.new: :$pseudo-class, :$declarations;
+    @!at-pages.push: CSS::AtPageRule.new: :$pseudo-class, :$declarations;
 }
 
 multi method at-rule('include', |c) {
@@ -44,7 +44,7 @@ multi method at-rule($rule, |c) {
 }
 
 multi method load(:at-rule($_)!) {
-    my $type = .<at-keyw>:delete;
+    my Str:D $type = .<at-keyw>:delete;
     $.at-rule: $type, |$_;
 }
 
@@ -56,18 +56,51 @@ multi method load(:ruleset($ast)!, :$media-list) {
 
 multi method load($_) is default { warn .raku }
 
-method parse($css!, Bool :$lax, Bool :$warn = True, |c) {
-    my $obj = self;
-    $_ .= new(|c) without $obj;
-    my $actions = $obj.module.actions.new: :$lax;
-    given $obj.module.parse($css, :rule<stylesheet>, :$actions) {
-        $obj.warnings.append: $actions.warnings;
+multi method parse(CSS::Stylesheet:U: $css!, Bool :$lax, Bool :$warn = True, |c) {
+    self.new(|c).parse($css, :$lax, :$warn);
+}
+multi method parse(CSS::Stylesheet:D: $css!, Bool :$lax, Bool :$warn = True) {
+    my $actions = $.module.actions.new: :$lax;
+    given $.module.parse($css, :rule<stylesheet>, :$actions) {
+        @!warnings.append: $actions.warnings;
         if $warn {
-            note $_ for $obj.warnings;
+            note $_ for $actions.warnings;
         }
-        $obj.load: |.ast;
+        $.load: |.ast;
     }
-    $obj;
+    self;
+}
+
+our sub merge-properties(@prop-sets, CSS::Properties $props = CSS::Properties.new) {
+    my %seen  = $props.properties.map(* => 1);
+    my %vital = $props.important;
+
+    for @prop-sets.reverse -> CSS::Properties $prop-set {
+        my %important = $prop-set.important;
+        for $prop-set.properties {
+            $props."$_"() = $prop-set."$_"()
+                if !%seen{$_}++ || (%important{$_} && !%vital{$_});
+        }
+    }
+    $props;
+}
+
+method page(Bool :$first, Bool :$right, Bool :$left, Str :$margin-box) {
+    my CSS::AtPageRule @page-rules = @!at-pages.grep: {
+        given .pseudo-class {
+            when 'first' { $first }
+            when 'left'  { $left  }
+            when 'right' { $right }
+            default { True }
+        }
+    };
+    my @prop-sets = @page-rules.map: -> $r {
+        with $margin-box { $r.margin-box{$_} }
+        else { $r.properties }
+    }
+    @prop-sets
+        ?? merge-properties(@prop-sets)
+        !! CSS::Properties;
 }
 
 method ast(Bool :$optimize = True, |c) {
