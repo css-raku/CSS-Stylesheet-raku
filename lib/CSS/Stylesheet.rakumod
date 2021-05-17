@@ -16,6 +16,9 @@ has Str $.charset = 'utf-8';
 has Exception @.warnings;
 has CSS::AtPageRule @.at-pages;
 
+##constant DisplayNode = ...; # not handled by Rakudo yet
+sub DisplayNone { state $ //= CSS::Properties.new: :display<none>; }
+
 multi method load(:stylesheet($_)!) {
     $.load: |$_ for .list;
 }
@@ -95,7 +98,7 @@ method page(Bool :$first, Bool :$right, Bool :$left, Str :$margin-box) {
         }
     };
     my @prop-sets = @page-rules.map: -> $r {
-        with $margin-box { $r.margin-box{$_} }
+        with $margin-box { $r.margin-box{$_} // DisplayNone }
         else { $r.properties }
     }
     @prop-sets
