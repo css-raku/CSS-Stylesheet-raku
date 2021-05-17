@@ -1,5 +1,5 @@
 [[Raku CSS Project]](https://css-raku.github.io)
- / [[CSS-Stylesheet Module]](https://css-raku.github.io/CSS-Stylesheet-raku)
+ / [[CSS-Stylesheet]](https://css-raku.github.io/CSS-Stylesheet-raku)
  / [CSS::Stylesheet](https://css-raku.github.io/CSS-Stylesheet-raku/CSS/Stylesheet)
 
 class CSS::Stylesheet
@@ -20,6 +20,13 @@ Methods
     method parse(Str $stylesheet, Str :$media) returns CSS::Stylesheet
 
 Parses the string as a CSS Stylesheet. Filters any `@media` rule-sets that do not match the supplied media object.
+
+### method page
+
+    method page(Bool :$first, Bool :$right, Bool :$left,
+                Str :$margin-box --> CSS::Properties)
+
+Compute `@page` at rule property list.
 
 ### method rules
 

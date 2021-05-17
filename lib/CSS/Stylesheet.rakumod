@@ -107,6 +107,10 @@ method ast(Bool :$optimize = True, |c) {
     my @stylesheet;
     my %at-rules{List};
 
+    for @!at-pages {
+        @stylesheet.push: .ast(:$optimize, |c);
+    }
+
     for @!rules -> $rule {
         my $rule-ast = $rule.ast(:$optimize, |c);
         unless $optimize && !$rule-ast<ruleset><declarations> {
@@ -151,6 +155,13 @@ media attributes which is used to filter `@media` rule-sets.
 
 Parses the string as a CSS Stylesheet. Filters any `@media` rule-sets that do not match
 the supplied media object.
+
+=head3 method page
+
+    method page(Bool :$first, Bool :$right, Bool :$left,
+                Str :$margin-box --> CSS::Properties)
+
+Compute `@page` at rule property list.
 
 
 =head3 method rules
