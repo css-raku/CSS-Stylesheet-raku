@@ -19,7 +19,7 @@ Classes
 
   * [CSS::Selectors](https://css-raku.github.io/CSS-Stylesheet-raku/CSS/Selectors) - CSS DOM attribute class
 
-  * [CSS::AtRulePage](https://css-raku.github.io/CSS-Stylesheet-raku/CSS/AtRulePage) - CSS @page {...} representation
+  * [CSS::AtRulePage](https://css-raku.github.io/CSS-Stylesheet-raku/CSS/AtPageRule) - CSS @page {...} representation
 
   * [CSS::Stylesheet](https://css-raku.github.io/CSS-Stylesheet-raku/CSS/Stylesheet) - CSS Stylesheet class
 
