@@ -10,21 +10,58 @@ Overall CSS Stylesheet representation
 Description
 -----------
 
-This class is used to parse style-sheet rule-sets. Objects have an associated media attributes which is used to filter `@media` rule-sets.
+This class is used to parse style-sheet rule-sets. Objects may an associated media attributes which is used to filter `@media` rule-sets.
 
 Methods
 -------
 
 ### method parse
 
-    method parse(Str $stylesheet, Str :$media) returns CSS::Stylesheet
+```raku
+method parse(
+    Str $stylesheet,      # stylesheet to parse
+    CSS::Media :$media,   # associated media (optional)
+    CSS::Module :$module, # CSS version to use (default CSS::Module::CSS3
+    Bool :$warn = True,   # display parse warnings
+) returns CSS::Stylesheet
+```
 
-Parses the string as a CSS Stylesheet. Filters any `@media` rule-sets that do not match the supplied media object.
+Parses the string as a CSS Stylesheet. Filters any `@media` rule-sets that do not match the associated media object.
+
+### method new (experimental)
+
+```raku
+method new(
+    CSS::Module :$module, # CSS version to use (default CSS::Module::CSS3)
+    Bool :$warn = True,   # display parse warnings
+    CSS::Ruleset :@rules,
+    CSS::AtPageRules :@at-pages,
+)
+```
+
+This method can be used to create stylesheets from scratch, For example:
+
+```raku
+my CSS::MediaQuery() $media-query = 'print';
+my CSS::Ruleset $h1 .= new: :selectors<h1>, :properties("color:blue");
+my CSS::Ruleset $h1-print .= new: :selectors<h1>, :properties("color:black"), :$media-query;
+my CSS::Properties() $page-props = 'margin:4pt'; 
+my CSS::AtPageRule $at-page .= new: :properties($page-props);
+my CSS::Stylesheet $stylesheet .= new: :rules[$h1, $h1-print], :at-pages[$at-page];
+say $stylesheet.Str;
+# @page { margin:4pt; }
+# h1 { color:blue; }
+# @media print { h1 { color:black; } }
+```
+
+See [CSS::Ruleset](https://css-raku.github.io/CSS-Stylesheet-raku/CSS/Ruleset), [CSS::AtPageRule](https://css-raku.github.io/CSS-Stylesheet-raku/CSS/AtPageRule), and [CSS::MediaQuery](https://css-raku.github.io/CSS-Stylesheet-raku/CSS/MediaQuery) for individual constructors and coercement rules.
 
 ### method page
 
-    method page(Bool :$first, Bool :$right, Bool :$left,
-                Str :$margin-box --> CSS::Properties)
+```raku
+method page(Bool :$first, Bool :$right, Bool :$left,
+            Str :$margin-box --> CSS::Properties)
+```
 
 Compute `@page` at rule property list.
 

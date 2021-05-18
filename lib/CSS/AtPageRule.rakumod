@@ -8,13 +8,13 @@ use CSS::Properties;
 has Str $.pseudo-class;
 
 #| Top-level CSS properties
-has CSS::Properties $.properties is built;
+has CSS::Properties() $.properties;
 
 #| Per page margin CSS properties
-has CSS::Properties %.margin-box;
+has CSS::Properties() %.margin-box;
 
-submethod TWEAK(List:D :$declarations!) {
-    given $declarations {
+submethod TWEAK(List :$declarations) {
+    with $declarations {
         $!properties .= new: :ast($_);
         for $declarations.grep: {.<at-rule>:exists} {
             # extract margin box

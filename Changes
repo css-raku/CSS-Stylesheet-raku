@@ -1,6 +1,9 @@
 Revision history for CSS-Stylesheet
 
 {{$NEXT}}
+    - Add CSS::MediaQuery
+    - Add documentation for creating a stylesheet from scratch. Uses CSS::MediaQuery along
+      with new coerecements for RuleSets and Selectors
 
 0.0.19  2021-05-18T11:55:31+12:00
     - Add CSS::AtPageRule and support for '@page' at-rules, including

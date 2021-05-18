@@ -3,6 +3,7 @@ unit class CSS::Media;
 use CSS::Properties :&from-ast;
 use CSS::Units :Resolution, :Length, :dpi;
 use CSS::Module::CSS3;
+use CSS::MediaQuery;
 
 subset MediaLen of Numeric is export(:MediaLen) where {!.so || $_ ~~ Length};
 subset MediaRes of Numeric is export(:MediaRes) where {!.so || $_ ~~ Resolution};
@@ -163,12 +164,13 @@ multi method query(:@media-list!) {
     @media-list.first({ $.query(|$_) });
 }
 
-multi method query(Str:D $query) {
-    my $actions = $!module.actions;
-    my $p = $!module.parse($query, :rule<media-list>, :$actions)
-        // fail "unable to parse media query: $_";
-    my $media-list = $p.ast;
+multi method query(CSS::MediaQuery:D() $query) {
+    my $media-list = $query.ast;
     $.query(:$media-list);
+}
+
+multi method ACCEPTS(CSS::Media:D: CSS::MediaQuery() $media-query) {
+    $.query($media-query);
 }
 
 =begin pod

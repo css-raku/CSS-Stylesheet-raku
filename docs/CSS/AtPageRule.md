@@ -11,11 +11,11 @@ class CSS::AtPageRule
 
 (optional) .e.g. 'left', 'right', 'first'
 
-### has CSS::Properties $.properties
+### has CSS::Properties(Any) $.properties
 
 Top-level CSS properties
 
-### has Associative[CSS::Properties] %.margin-box
+### has Associative[CSS::Properties(Any)] %.margin-box
 
 Per page margin CSS properties
 

@@ -3,31 +3,33 @@ unit class CSS::Ruleset;
 
 use CSS::Properties;
 use CSS::Selectors;
+use CSS::Module;
 use CSS::Module::CSS3;
-use CSS::Module::CSS3::Actions;
 use CSS::Writer;
+use CSS::MediaQuery;
 
-has CSS::Selectors $.selectors handles<xpath specificity>;
-has CSS::Properties $.properties;
+has CSS::Selectors() $.selectors handles<xpath specificity>;
+has CSS::Properties() $.properties;
+has CSS::MediaQuery() $.media-query; # associated media (raw AST only)
 
-submethod TWEAK(:%ast! is copy, |c) {
+submethod TWEAK(:%ast is copy, :selectors($), :properties($), :media-query($), |c) {
     %ast = $_ with %ast<ruleset>;
     $!properties .= new: :ast($_), |c
-       given %ast<declarations>:delete;
-    $!selectors .= new: :%ast;
+       with %ast<declarations>:delete;
+    $!selectors .= new: :%ast, |c
+        if %ast;
 }
 
-multi method parse(Str $css!) { self.parse: :$css }
-multi method parse(Str :$css! --> CSS::Ruleset) {
-    my CSS::Module::CSS3::Actions $actions .= new;
-    my $p := CSS::Module::CSS3.module.parse($css, :rule<ruleset>, :$actions)
-        or die "unable to parse CSS rule-set: $css";
+method parse(CSS::Ruleset:U: Str:D $rule-set!, :$module = CSS::Module::CSS3.module, |c --> CSS::Ruleset) {
+    my $actions .= $module.actions.new;
+    my $p := $module.parse($rule-set, :rule<ruleset>, :$actions)
+        or die "unable to parse CSS rule-set: $rule-set";
     note $_ for $actions.warnings;
     my $ast = $p.ast;
-    self.new: :$ast;
+    self.new: :$ast, |c;
 }
 
-multi method COERCE(Str:D $css --> CSS::Ruleset ) { self.parse: :$css; }
+multi method COERCE(Str:D $rule-set --> CSS::Ruleset ) { self.parse: $rule-set; }
 
 method ast(|c) {
     my %ast = $!selectors.ast;

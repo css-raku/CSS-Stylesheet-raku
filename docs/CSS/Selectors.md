@@ -1,5 +1,5 @@
 [[Raku CSS Project]](https://css-raku.github.io)
- / [[CSS-Stylesheet Module]](https://css-raku.github.io/CSS-Stylesheet-raku)
+ / [[CSS-Stylesheet]](https://css-raku.github.io/CSS-Stylesheet-raku)
  / [CSS::Selectors](https://css-raku.github.io/CSS-Stylesheet-raku/CSS/Selectors)
 
 class CSS::Selectors

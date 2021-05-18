@@ -1,5 +1,5 @@
 [[Raku CSS Project]](https://css-raku.github.io)
- / [[CSS-Stylesheet Module]](https://css-raku.github.io/CSS-Stylesheet-raku)
+ / [[CSS-Stylesheet]](https://css-raku.github.io/CSS-Stylesheet-raku)
 
 [![Actions Status](https://github.com/css-raku/CSS-Stylesheet-raku/workflows/test/badge.svg)](https://github.com/css-raku/CSS-Stylesheet-raku/actions)
 
@@ -19,7 +19,7 @@ Classes
 
   * [CSS::Selectors](https://css-raku.github.io/CSS-Stylesheet-raku/CSS/Selectors) - CSS DOM attribute class
 
-  * [CSS::AtRulePage](https://css-raku.github.io/CSS-Stylesheet-raku/CSS/AtPageRule) - CSS @page {...} representation
+  * [CSS::AtPageRule](https://css-raku.github.io/CSS-Stylesheet-raku/CSS/AtPageRule) - CSS @page {...} representation
 
   * [CSS::Stylesheet](https://css-raku.github.io/CSS-Stylesheet-raku/CSS/Stylesheet) - CSS Stylesheet class
 
