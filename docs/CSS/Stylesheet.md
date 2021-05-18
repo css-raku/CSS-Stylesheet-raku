@@ -10,7 +10,7 @@ Overall CSS Stylesheet representation
 Description
 -----------
 
-This class is used to parse style-sheet rule-sets. Objects may an associated media attributes which is used to filter `@media` rule-sets.
+This class is used to parse style-sheet rule-sets. Objects may have an associated media attributes which is used to filter `@media` rule-sets.
 
 Methods
 -------
@@ -63,11 +63,19 @@ method page(Bool :$first, Bool :$right, Bool :$left,
             Str :$margin-box --> CSS::Properties)
 ```
 
-Compute `@page` at rule property list.
+Computes an `@page` at rule property list. Optionally with a `:first`, `:left`, or `:right` page selection.
+
+The `:$margin-box` option matches a sub-rule such as `@top-left`, `@top-center`, etc. If there is no such rule, a property list of `display:none;` is returned.
 
 ### method rules
 
     method rules() returns Array[CSS::Ruleset]
 
-Returns the rule-sets in the loaded style-sheet.
+Returns an array of all the style sheet's rule-sets.
+
+### method at-pages
+
+    method at-pages() returns Array[CSS::AtPageRule]
+
+Returns an array of all the style sheet's `@page` at-rules.
 

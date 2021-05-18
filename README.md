@@ -13,15 +13,16 @@ including rules-sets and component @media and @page clauses
 Classes
 -------
 
-  * [CSS::Media](https://css-raku.github.io/CSS-Stylesheet-raku/CSS/Media) - CSS Media class
+  * [CSS::Stylesheet](https://css-raku.github.io/CSS-Stylesheet-raku/CSS/Stylesheet) - CSS Stylesheet class
+
+  * [CSS::Media](https://css-raku.github.io/CSS-Stylesheet-raku/CSS/Media) - CSS Media represenetation
+  * [CSS::MediaQuery](https://css-raku.github.io/CSS-Stylesheet-raku/CSS/MediaQuery) - CSS Media query class
 
   * [CSS::Ruleset](https://css-raku.github.io/CSS-Stylesheet-raku/CSS/Ruleset) - CSS Ruleset class
 
   * [CSS::Selectors](https://css-raku.github.io/CSS-Stylesheet-raku/CSS/Selectors) - CSS DOM attribute class
 
   * [CSS::AtPageRule](https://css-raku.github.io/CSS-Stylesheet-raku/CSS/AtPageRule) - CSS @page {...} representation
-
-  * [CSS::Stylesheet](https://css-raku.github.io/CSS-Stylesheet-raku/CSS/Stylesheet) - CSS Stylesheet class
 
 
 See Also

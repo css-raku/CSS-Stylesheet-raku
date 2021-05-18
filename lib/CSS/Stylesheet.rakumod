@@ -158,7 +158,7 @@ method Str(:$optimize = True, Bool :$terse = True, *%opt) is also<gist> {
 
 =head2 Description
 
-This class is used to parse style-sheet rule-sets. Objects may an associated
+This class is used to parse style-sheet rule-sets. Objects may have an associated
 media attributes which is used to filter `@media` rule-sets.
 
 =head2 Methods
@@ -205,13 +205,22 @@ See L<CSS::Ruleset>, L<CSS::AtPageRule>, and L<CSS::MediaQuery> for individual c
 method page(Bool :$first, Bool :$right, Bool :$left,
             Str :$margin-box --> CSS::Properties)
 =end code
-Compute `@page` at rule property list.
+Computes an `@page` at rule property list. Optionally with
+a `:first`, `:left`, or `:right` page selection.
 
+The `:$margin-box` option matches a sub-rule such as `@top-left`, `@top-center`,
+etc. If there is no such rule, a property list of `display:none;` is returned.
 
 =head3 method rules
 
      method rules() returns Array[CSS::Ruleset]
 
-Returns the rule-sets in the loaded style-sheet.
+Returns an array of all the style sheet's rule-sets.
+
+=head3 method at-pages
+
+     method at-pages() returns Array[CSS::AtPageRule]
+
+Returns an array of all the style sheet's `@page` at-rules.
 
 =end pod
