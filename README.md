@@ -8,7 +8,7 @@ Description
 ------
 
 This module contains representational classes for CSS Style sheets,
-including rules-sets and component @media clauses
+including rules-sets and component @media and @page clauses
 
 Classes
 -------
@@ -18,6 +18,8 @@ Classes
   * [CSS::Ruleset](https://css-raku.github.io/CSS-Stylesheet-raku/CSS/Ruleset) - CSS Ruleset class
 
   * [CSS::Selectors](https://css-raku.github.io/CSS-Stylesheet-raku/CSS/Selectors) - CSS DOM attribute class
+
+  * [CSS::AtRulePage](https://css-raku.github.io/CSS-Stylesheet-raku/CSS/AtRulePage) - CSS @page {...} representation
 
   * [CSS::Stylesheet](https://css-raku.github.io/CSS-Stylesheet-raku/CSS/Stylesheet) - CSS Stylesheet class
 
@@ -35,5 +37,5 @@ See Also
 Todo
 ----
 
-- Other At-Rule variants (in addition to `@media` and `@import`) `@document`, `@page`, `@font-face`
+- Other At-Rule variants: `@import` `@document`, `@font-face`
 

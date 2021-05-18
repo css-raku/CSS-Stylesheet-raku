@@ -1,10 +1,16 @@
+#| @page at-rule representation, including margin boxes
 unit class CSS::AtPageRule;
 
 use Method::Also;
 use CSS::Properties;
 
+#| (optional) .e.g. 'left', 'right', 'first'
 has Str $.pseudo-class;
+
+#| Top-level CSS properties
 has CSS::Properties $.properties is built;
+
+#| Per page margin CSS properties
 has CSS::Properties %.margin-box;
 
 submethod TWEAK(List:D :$declarations!) {
@@ -21,6 +27,7 @@ submethod TWEAK(List:D :$declarations!) {
     }
 }
 
+#| return AST representation of a single @page at-rule
 method ast(|c) {
     my @declarations = $!properties.ast(:optimize, |c)<declaration-list>.List;
 
@@ -34,6 +41,7 @@ method ast(|c) {
     :%at-rule;
 }
 
+#| serialize a @page rule to CSS
 method Str(:$optimize = True, Bool :$terse = True, *%opt) is also<gist> {
     my Pair $ast = self.ast: :$optimize;
     %opt<color-names> //= True
