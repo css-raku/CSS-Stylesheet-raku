@@ -79,3 +79,31 @@ Returns an array of all the style sheet's rule-sets.
 
 Returns an array of all the style sheet's `@page` at-rules.
 
+See Also
+--------
+
+### [CSS::PageBox](https://css-raku.github.io/CSS-Properties-raku/CSS/PageBox)
+
+[CSS::PageBox](https://css-raku.github.io/CSS-Properties-raku/CSS/PageBox) (from the CSS::Properties distrubution) is able to create a correctly sized page using `@page` properties as in the following example:
+
+```raku
+use CSS::Stylesheet;
+use CSS::Properties;
+use CSS::PageBox;
+my CSS::Stylesheet $stylesheet .= parse: q:to<END>;
+    @page {
+      size:a4 landscape;
+      margin:3mm;
+      border:2mm;
+      padding:5mm;
+    }
+    END
+
+my CSS::Properties:D $page-props = $stylesheet.page: :units<mm>;
+my CSS::PageBox $box .= new: :css($page-props);
+say $box.margin;  # [297, 210, 0, 0]
+say $box.border;  # [294, 207, 3, 3]
+say $box.padding; # [292, 205, 5, 5]
+say $box.content; # [287, 200, 10, 10]
+```
+

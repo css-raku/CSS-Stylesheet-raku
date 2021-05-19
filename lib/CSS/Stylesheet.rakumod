@@ -98,7 +98,7 @@ our sub merge-properties(@prop-sets, CSS::Properties $props = CSS::Properties.ne
     $props;
 }
 
-method page(Bool :$first, Bool :$right, Bool :$left, Str :$margin-box) {
+method page(Bool :$first, Bool :$right, Bool :$left, Str :$margin-box, |c) {
     my CSS::AtPageRule @page-rules = @!at-pages.grep: {
         given .pseudo-class {
             when 'first' { $first }
@@ -112,7 +112,7 @@ method page(Bool :$first, Bool :$right, Bool :$left, Str :$margin-box) {
         else { $r.properties }
     }
     @prop-sets
-        ?? merge-properties(@prop-sets)
+        ?? merge-properties(@prop-sets, CSS::Properties.new(|c))
         !! CSS::Properties;
 }
 
@@ -222,5 +222,33 @@ Returns an array of all the style sheet's rule-sets.
      method at-pages() returns Array[CSS::AtPageRule]
 
 Returns an array of all the style sheet's `@page` at-rules.
+
+=head2 See Also
+=head3 L<CSS::PageBox>
+
+L<CSS::PageBox> (from the CSS::Properties distrubution) is able to create
+a correctly sized page using `@page` properties as in the following example:
+
+=begin code :lang<raku>
+use CSS::Stylesheet;
+use CSS::Properties;
+use CSS::PageBox;
+my CSS::Stylesheet $stylesheet .= parse: q:to<END>;
+    @page {
+      size:a4 landscape;
+      margin:3mm;
+      border:2mm;
+      padding:5mm;
+    }
+    END
+
+my CSS::Properties:D $page-props = $stylesheet.page: :units<mm>;
+my CSS::PageBox $box .= new: :css($page-props);
+say $box.margin;  # [297, 210, 0, 0]
+say $box.border;  # [294, 207, 3, 3]
+say $box.padding; # [292, 205, 5, 5]
+say $box.content; # [287, 200, 10, 10]
+
+=end code
 
 =end pod
