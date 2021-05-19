@@ -8,7 +8,7 @@ Description
 ------
 
 This module contains representational classes for CSS Style sheets,
-including rules-sets and component @media and @page clauses
+including rules-sets and component @media and @page clauses.
 
 Classes
 -------
