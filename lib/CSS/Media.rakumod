@@ -169,6 +169,7 @@ multi method query(CSS::MediaQuery:D() $query) {
     $.query(:$media-list);
 }
 
+multi method ACCEPTS(CSS::Media:U: $) { True }
 multi method ACCEPTS(CSS::Media:D: CSS::MediaQuery() $media-query) {
     $.query($media-query);
 }

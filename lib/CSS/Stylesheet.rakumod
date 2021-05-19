@@ -38,7 +38,7 @@ multi method at-rule('media', :@media-list, :@rule-list) {
     my CSS::MediaQuery $media-query .= new: :ast(@media-list)
         if @media-list;
     # filter rule-sets, based on our media settings
-    if !$!media || $!media ~~ $media-query {
+    if $media-query ~~ $!media {
         self.load(:$media-query, |$_) for @rule-list;
     }
 }
@@ -68,8 +68,8 @@ multi method load(:ruleset($ast)!, CSS::MediaQuery :$media-query) {
 
 multi method load($_) is default { warn .raku }
 
-multi method parse(CSS::Stylesheet:U: $css!, |c) {
-    self.new.parse($css, |c);
+multi method parse(CSS::Stylesheet:U: $css!, Bool :$lax, Bool :$warn = True, |c) {
+    self.new(|c).parse($css, :$lax, :$warn);
 }
 multi method parse(CSS::Stylesheet:D: $css!, Bool :$lax, Bool :$warn = True, CSS::Module :$module) {
     $!module = $_ with $module;

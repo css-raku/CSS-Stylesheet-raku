@@ -1,6 +1,7 @@
 Revision history for CSS-Stylesheet
 
 {{$NEXT}}
+    - Fix and test media selection. Broken in 0.0.20
 
 0.0.20  2021-05-19T13:22:39+12:00
     - Add CSS::MediaQuery
