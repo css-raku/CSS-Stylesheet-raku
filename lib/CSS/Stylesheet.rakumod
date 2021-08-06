@@ -11,11 +11,18 @@ use Method::Also;
 
 has CSS::Media $.media;
 has CSS::Module $.module = CSS::Module::CSS3.module; # associated CSS module
+has CSS::Module $.fontface-module = $!module.sub-module<@font-face>;
 has CSS::Ruleset @.rules;
-has CSS::MediaQuery %.rule-media{CSS::Ruleset};
+has CSS::MediaQuery %.rule-media{Any};
 has Str $.charset = 'utf-8';
 has Exception @.warnings;
 has CSS::AtPageRule @.at-pages;
+# by sequence
+has CSS::Properties @.font-face;
+# by font-name
+has CSS::Properties %!font-face;
+multi method font-face { @!font-face }
+multi method font-face(Str $family) { %!font-face{$family} }
 
 ##constant DisplayNode = ...; # not handled by Rakudo yet
 sub DisplayNone { state $ //= CSS::Properties.new: :display<none>; }
@@ -47,6 +54,14 @@ multi method at-rule('page', Str :$pseudo-class, List :$declarations) {
     @!at-pages.push: CSS::AtPageRule.new: :$pseudo-class, :$declarations;
 }
 
+multi method at-rule('font-face', :declarations(@ast)!, CSS::MediaQuery :$media-query) {
+    my CSS::Properties $font-face .= new: :@ast, :module($!fontface-module);
+    %!rule-media{$font-face} = $_ with $media-query;
+    @!font-face.push: $font-face;
+    %!font-face{$_} = $font-face
+        with $font-face.font-family;
+}
+
 multi method at-rule('include', |c) {
     warn 'todo: @include(...) at rules';
 }
@@ -55,9 +70,9 @@ multi method at-rule($rule, |c) {
     warn "ignoring \@$rule \{...\}";
 }
 
-multi method load(:at-rule($_)!) {
+multi method load(:at-rule($_)!, |c) {
     my Str:D $type = .<at-keyw>:delete;
-    $.at-rule: $type, |$_;
+    $.at-rule: $type, |$_, |c;
 }
 
 multi method load(:ruleset($ast)!, CSS::MediaQuery :$media-query) {
@@ -116,6 +131,17 @@ method page(Bool :$first, Bool :$right, Bool :$left, Str :$margin-box, |c) {
         !! CSS::Properties;
 }
 
+method !media-slot(@stylesheet, %at-rules, $rule) {
+    with %!rule-media{$rule} {
+        my $media-list = .ast;
+        %at-rules{$media-list} //= do {
+            my $at-rule = %(:at-keyw<media>, :$media-list, :rule-list[]);
+            @stylesheet.push: (:$at-rule);
+            $at-rule;
+        }
+    }
+}
+
 method ast(Bool :$optimize = True, |c) {
     my @stylesheet;
     my %at-rules{List};
@@ -127,22 +153,26 @@ method ast(Bool :$optimize = True, |c) {
     for @!rules -> $rule {
         my $rule-ast = $rule.ast(:$optimize, |c);
         unless $optimize && !$rule-ast<ruleset><declarations> {
-            with %!rule-media{$rule} {
-                my $media-list = .ast;
-                given %at-rules{$media-list} //= do {
-                   my $at-rule = %(:at-keyw<media>, :$media-list, :rule-list[]);
-                    %at-rules{$media-list} = $at-rule;
-                    @stylesheet.push: (:$at-rule);
-                    $at-rule;
-                } {
-                    .<rule-list>.push: $rule-ast;
-                }
+           with self!media-slot(@stylesheet, %at-rules, $rule)  {
+               .<rule-list>.push: $rule-ast;
             }
             else {
                 @stylesheet.push: $rule-ast;
             }
         }
     }
+
+    for @!font-face {
+        my List:D $declarations = .ast(:$optimize)<declaration-list>;
+        my $rule-ast = 'at-rule' => %( :at-keyw<font-face>, :$declarations );
+        with self!media-slot(@stylesheet, %at-rules, $_)  {
+            .<rule-list>.push: $rule-ast;
+        }
+        else {
+            @stylesheet.push: $rule-ast;
+        }
+    }
+
     :@stylesheet;
 }
 
@@ -158,8 +188,7 @@ method Str(:$optimize = True, Bool :$terse = True, *%opt) is also<gist> {
 
 =head2 Description
 
-This class is used to parse style-sheet rule-sets. Objects may have an associated
-media attributes which is used to filter `@media` rule-sets.
+This class is used to build or parse CSS style-sheets, including selectors and rule-sets. `@page` and `@media` at-rules are also supported.
 
 =head2 Methods
 
@@ -172,7 +201,13 @@ method parse(
     Bool :$warn = True,   # display parse warnings
 ) returns CSS::Stylesheet
 =end code
-Parses the string as a CSS Stylesheet. Filters any `@media` rule-sets that do not match the associated media object.
+Parses an existing CSS style-sheet.
+
+=item Filters any `@media` scoped rule-sets that do not match the associated media object.
+
+=items The `rules` method can then be used to return remaining rule-sets (see below)
+
+=item `@page` property sets and page-boxes can be queried using the `page` method (see below).
 
 =head3 method new (experimental)
 =begin code :lang<raku>
@@ -183,7 +218,7 @@ method new(
     CSS::AtPageRules :@at-pages,
 )
 =end code
-This method can be used to create stylesheets from scratch, For example:
+The `new` method can be used to create CSS stylesheets from scratch, For example:
 =begin code :lang<raku>
 my CSS::MediaQuery() $media-query = 'print';
 my CSS::Ruleset $h1 .= new: :selectors<h1>, :properties("color:blue");
@@ -215,7 +250,9 @@ etc. If there is no such rule, a property list of `display:none;` is returned.
 
      method rules() returns Array[CSS::Ruleset]
 
-Returns an array of all the style sheet's rule-sets.
+Returns an array of all the style sheet's rule-sets, after any `@media` selections.
+
+If a `media` has not been set for the style-sheet, all rule-sets are returned.     
 
 =head3 method at-pages
 

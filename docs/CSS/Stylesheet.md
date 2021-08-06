@@ -10,7 +10,7 @@ Overall CSS Stylesheet representation
 Description
 -----------
 
-This class is used to parse style-sheet rule-sets. Objects may have an associated media attributes which is used to filter `@media` rule-sets.
+This class is used to build or parse CSS style-sheets, including selectors and rule-sets. `@page` and `@media` at-rules are also supported.
 
 Methods
 -------
@@ -26,7 +26,16 @@ method parse(
 ) returns CSS::Stylesheet
 ```
 
-Parses the string as a CSS Stylesheet. Filters any `@media` rule-sets that do not match the associated media object.
+Parses an existing CSS style-sheet.
+
+  * Filters any `@media` scoped rule-sets that do not match the associated media object.
+
+items
+=====
+
+The `rules` method can then be used to return remaining rule-sets (see below)
+
+  * `@page` property sets and page-boxes can be queried using the `page` method (see below).
 
 ### method new (experimental)
 
@@ -39,7 +48,7 @@ method new(
 )
 ```
 
-This method can be used to create stylesheets from scratch, For example:
+The `new` method can be used to create CSS stylesheets from scratch, For example:
 
 ```raku
 my CSS::MediaQuery() $media-query = 'print';
@@ -71,7 +80,9 @@ The `:$margin-box` option matches a sub-rule such as `@top-left`, `@top-center`,
 
     method rules() returns Array[CSS::Ruleset]
 
-Returns an array of all the style sheet's rule-sets.
+Returns an array of all the style sheet's rule-sets, after any `@media` selections.
+
+If a `media` has not been set for the style-sheet, all rule-sets are returned. 
 
 ### method at-pages
 

@@ -1,6 +1,9 @@
 Revision history for CSS-Stylesheet
 
 {{$NEXT}}
+    - Implement @font-face rules. Fonts properties can be
+      accessed by font-face(), which returns a list, or
+      font-face($family), to select by family name.
 
 0.0.21  2021-05-20T06:58:25+12:00
     - Fix and test media selection. Broken in 0.0.20
@@ -8,7 +11,7 @@ Revision history for CSS-Stylesheet
 0.0.20  2021-05-19T13:22:39+12:00
     - Add CSS::MediaQuery
     - Add documentation for creating a stylesheet from scratch. Uses CSS::MediaQuery along
-      with new coerecements for RuleSets and Selectors
+      with new coercements for RuleSets and Selectors
 
 0.0.19  2021-05-18T11:55:31+12:00
     - Add CSS::AtPageRule and support for '@page' at-rules, including
