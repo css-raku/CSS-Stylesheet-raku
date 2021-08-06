@@ -1,6 +1,8 @@
 Revision history for CSS-Stylesheet
 
 {{$NEXT}}
+
+0.0.22  2021-08-06T12:47:54+12:00
     - Implement @font-face rules. Fonts properties can be
       accessed by font-face(), which returns a list, or
       font-face($family), to select by family name.
