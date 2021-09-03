@@ -1,13 +1,16 @@
 #| Overall CSS Stylesheet representation
 unit class CSS::Stylesheet:ver<0.0.22>;
 
-use CSS::Media;
 use CSS::AtPageRule;
+use CSS::Font::Descriptor;
+use CSS::Font::Selector;
+use CSS::MediaQuery;
+use CSS::Media;
 use CSS::Module:CSS3;
 use CSS::Ruleset;
 use CSS::Writer;
-use CSS::MediaQuery;
 use Method::Also;
+use URI;
 
 has CSS::Media $.media;
 has CSS::Module $.module = CSS::Module::CSS3.module; # associated CSS module
@@ -18,9 +21,15 @@ has Str $.charset = 'utf-8';
 has Exception @.warnings;
 has CSS::AtPageRule @.at-pages;
 # by sequence
-has CSS::Properties @.font-face;
+has CSS::Font::Descriptor @.font-face;
 # by font-name
-has CSS::Properties %!font-face;
+has CSS::Font::Descriptor %!font-face;
+has URI() $.base-url = '.';
+
+method font-selector($font, |c) {
+    CSS::Font::Selector.new: :$font, :$!base-url, :@.font-face, |c;
+}
+
 multi method font-face { @!font-face }
 multi method font-face(Str $family) { %!font-face{$family} }
 
@@ -55,7 +64,7 @@ multi method at-rule('page', Str :$pseudo-class, List :$declarations) {
 }
 
 multi method at-rule('font-face', :declarations(@ast)!, CSS::MediaQuery :$media-query) {
-    my CSS::Properties $font-face .= new: :@ast, :module($!fontface-module);
+    my CSS::Font::Descriptor $font-face .= new: :@ast, :module($!fontface-module);
     %!rule-media{$font-face} = $_ with $media-query;
     @!font-face.push: $font-face;
     %!font-face{$_} = $font-face
@@ -287,5 +296,54 @@ say $box.padding; # [292, 205, 5, 5]
 say $box.content; # [287, 200, 10, 10]
 
 =end code
+
+=head3 font-face
+=begin code :lang<raku>
+method font-face() returns Array[CSS::Properties]
+=end code
+Returns a list of properties declared  via `@font-face` rules.
+
+Note that L<CSS::Font> `match()` method can be used to select the first (if any)
+matching rule.
+
+=begin code :lang<raku>
+my $style = q:to<END>.split(/^^'---'$$/);
+    @font-face {
+      font-family: "DejaVu Sans";
+      src: url("fonts/DejaVuSans.ttf");
+    }
+    @font-face {
+      font-family: "DejaVu Sans";
+      src: url("fonts/DejaVuSans-Bold.ttf");
+      font-weight: bold;
+    }
+    @font-face {
+      font-family: "DejaVu Sans";
+      src: url("fonts/DejaVuSans-Oblique.ttf");
+      font-style: oblique;
+    }
+    @font-face {
+      font-family: "DejaVu Sans";
+      src: url("fonts/DejaVuSans-BoldOblique.ttf");
+      font-weight: bold;
+      font-style: oblique;
+    }
+    END
+    my CSS::Stylesheet $css .= parse($style);
+    my CSS::Font $font .= new: font-props("bold italic 12pt DejaVu Sans");
+    say $font.select($css.font-face).src; # fonts/DejaVuSans-BoldOblique.ttf
+=end code
+
+=head3 method base-url
+=begin code :lang<raku>
+method base-url returns URI
+=end code
+A default base URL for the stylesheet.
+
+=head3 method font-selector
+=begin code :lang<raku>
+method font-selector(CSS::Font() $font, URI() :$base-url) returns CSS::Font::Selector
+=end code
+Returns a L<CSS::Font::Selector> objects for font matching and selection
 
 =end pod
