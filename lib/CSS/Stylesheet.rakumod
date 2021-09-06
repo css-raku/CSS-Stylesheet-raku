@@ -3,7 +3,7 @@ unit class CSS::Stylesheet:ver<0.0.22>;
 
 use CSS::AtPageRule;
 use CSS::Font::Descriptor;
-use CSS::Font::Selector;
+use CSS::Font::Resources;
 use CSS::MediaQuery;
 use CSS::Media;
 use CSS::Module:CSS3;
@@ -26,8 +26,8 @@ has CSS::Font::Descriptor @.font-face;
 has CSS::Font::Descriptor %!font-face;
 has URI() $.base-url = '.';
 
-method font-selector($font, |c) {
-    CSS::Font::Selector.new: :$font, :$!base-url, :@.font-face, |c;
+method font-resources($font, |c) {
+    CSS::Font::Resources.new: :$font, :$!base-url, :@.font-face, |c;
 }
 
 multi method font-face { @!font-face }
@@ -340,10 +340,10 @@ method base-url returns URI
 =end code
 A default base URL for the stylesheet.
 
-=head3 method font-selector
+=head3 method font-resources
 =begin code :lang<raku>
-method font-selector(CSS::Font() $font, URI() :$base-url) returns CSS::Font::Selector
+method font-resources(CSS::Font() $font, URI() :$base-url) returns CSS::Font::Resources
 =end code
-Returns a L<CSS::Font::Selector> objects for font matching and selection
+Returns a L<CSS::Font::Resources> objects for font matching and selection
 
 =end pod

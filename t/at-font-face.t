@@ -19,15 +19,15 @@ is $stylesheet.font-face('Para').Str, "font-family:'Para'; src:url('myfonts/para
 is $stylesheet.font-face[0].Str, "font-family:'Print'; src:url('myfonts/print.otf');";
 is-deeply $stylesheet.Str.lines, @lines.List, 'Str method';
 
-my $font-selector = $stylesheet.font-selector("12pt Para");
-isa-ok $font-selector, "CSS::Font::Selector";
-isa-ok $font-selector.font, "CSS::Font";
-isa-ok $font-selector.font-face[0], "CSS::Font::Descriptor";
+my $font-resources = $stylesheet.font-resources("12pt Para");
+isa-ok $font-resources, "CSS::Font::Resources";
+isa-ok $font-resources.font, "CSS::Font";
+isa-ok $font-resources.font-face[0], "CSS::Font::Descriptor";
 
-my @sources = $font-selector.sources;
-is +@sources, 1;
+my @sources = $font-resources.sources;
+is +@sources, 2;
 given @sources.head {
-    .&isa-ok: 'CSS::Font::Selector::Source::URI';
+    .&isa-ok: 'CSS::Font::Resources::Source::Url';
     .url.Str.&is: 't/myfonts/para.otf';
     .family.&is: 'Para';
     .format.&is: 'opentype';

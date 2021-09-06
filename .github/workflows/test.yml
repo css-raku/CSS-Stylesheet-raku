@@ -15,9 +15,9 @@ jobs:
         os:
           - ubuntu-latest
           - macOS-latest
-          - windows-latest
+##          - windows-latest
         raku-version:
-          - 'latest'
+##          - 'latest'
           - '2020.11'
     runs-on: ${{ matrix.os }}
     steps:
@@ -28,6 +28,7 @@ jobs:
       - name: Install Dependencies
         run: |
           zef install --/test App::Prove6
+          (git clone https://github.com/css-raku/CSS-Font-Resources-raku && cd CSS-Font-Resources-raku && zef install .)
           zef install --deps-only .
       - name: Run Tests
         run: prove6 -I. t
