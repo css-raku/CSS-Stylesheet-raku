@@ -2,6 +2,10 @@ Revision history for CSS-Stylesheet
 
 {{$NEXT}}
 
+0.0.23  2021-09-08T09:27:33+12:00
+    - Integrate with CSS::Font::Resources. Add method font-resources()
+      which returns a list of matching fonts using @font-face declarations.
+
 0.0.22  2021-08-06T12:47:54+12:00
     - Implement @font-face rules. Fonts properties can be
       accessed by font-face(), which returns a list, or

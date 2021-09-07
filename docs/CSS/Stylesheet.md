@@ -166,8 +166,8 @@ my $style = q:to<END>.split(/^^'---'$$/);
     }
     END
     my CSS::Stylesheet $css .= parse($style);
-    my CSS::Font $font .= new: font-props("bold italic 12pt DejaVu Sans");
+    my CSS::Font() $font = "bold italic 12pt DejaVu Sans";
     my CSS::Font::Resources::Sources @srcs = $css-font-sources($font);
-    say @src.head.IO.path; # fonts/DejaVuSans-BoldOblique.ttf
+    say @src.head.Str; # fonts/DejaVuSans-BoldOblique.ttf
 ```
 
