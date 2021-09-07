@@ -1,7 +1,7 @@
 use v6;
 use Test;
 use CSS::Stylesheet;
-plan 14;
+plan 11;
 
 my $css = q:to<END>;
 p { color:blue; font-family:'Para'; }
@@ -19,12 +19,7 @@ is $stylesheet.font-face('Para').Str, "font-family:'Para'; src:url('myfonts/para
 is $stylesheet.font-face[0].Str, "font-family:'Print'; src:url('myfonts/print.otf');";
 is-deeply $stylesheet.Str.lines, @lines.List, 'Str method';
 
-my $font-resources = $stylesheet.font-resources("12pt Para");
-isa-ok $font-resources, "CSS::Font::Resources";
-isa-ok $font-resources.font, "CSS::Font";
-isa-ok $font-resources.font-face[0], "CSS::Font::Descriptor";
-
-my @sources = $font-resources.sources;
+my @sources = $stylesheet.font-sources("12pt Para");
 is +@sources, 2;
 given @sources.head {
     .&isa-ok: 'CSS::Font::Resources::Source::Url';

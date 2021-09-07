@@ -26,8 +26,8 @@ has CSS::Font::Descriptor @.font-face;
 has CSS::Font::Descriptor %!font-face;
 has URI() $.base-url = '.';
 
-method font-resources($font, |c) {
-    CSS::Font::Resources.new: :$font, :$!base-url, :@.font-face, |c;
+method font-sources($font, |c) {
+    CSS::Font::Resources.sources: :$font, :$!base-url, :@.font-face, |c;
 }
 
 multi method font-face { @!font-face }
@@ -303,8 +303,17 @@ method font-face() returns Array[CSS::Properties]
 =end code
 Returns a list of properties declared  via `@font-face` rules.
 
-Note that L<CSS::Font> `match()` method can be used to select the first (if any)
-matching rule.
+=head3 method base-url
+=begin code :lang<raku>
+method base-url returns URI
+=end code
+A default base URL for the stylesheet.
+
+=head3 method font-source
+=begin code :lang<raku>
+method font-sources(CSS::Font() $font, :$formats) returns CSS::Font::Resources
+=end code
+Returns a L<CSS::Font::Resources> objects for font matching and selection
 
 =begin code :lang<raku>
 my $style = q:to<END>.split(/^^'---'$$/);
@@ -331,19 +340,8 @@ my $style = q:to<END>.split(/^^'---'$$/);
     END
     my CSS::Stylesheet $css .= parse($style);
     my CSS::Font $font .= new: font-props("bold italic 12pt DejaVu Sans");
-    say $font.select($css.font-face).src; # fonts/DejaVuSans-BoldOblique.ttf
+    my CSS::Font::Resources::Sources @srcs = $css-font-sources($font);
+    say @src.head.IO.path; # fonts/DejaVuSans-BoldOblique.ttf
 =end code
-
-=head3 method base-url
-=begin code :lang<raku>
-method base-url returns URI
-=end code
-A default base URL for the stylesheet.
-
-=head3 method font-resources
-=begin code :lang<raku>
-method font-resources(CSS::Font() $font, URI() :$base-url) returns CSS::Font::Resources
-=end code
-Returns a L<CSS::Font::Resources> objects for font matching and selection
 
 =end pod
