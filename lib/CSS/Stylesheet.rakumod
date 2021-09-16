@@ -52,9 +52,10 @@ multi method at-rule('charset', :string($_)!) {
     $!charset = .lc;
 }
 
-multi method at-rule('media', :@media-list, :@rule-list) {
+multi method at-rule('media', :@media-list, :@rule-list,  CSS::MediaQuery :$*media-query) {
     my CSS::MediaQuery $media-query .= new: :ast(@media-list)
         if @media-list;
+    %!rule-media{$media-query} = $_ with $*media-query;
     # filter rule-sets, based on our media settings
     if $media-query ~~ $!media {
         self.load(:$media-query, |$_) for @rule-list;
@@ -65,9 +66,9 @@ multi method at-rule('page', Str :$pseudo-class, List :$declarations) {
     @!at-pages.push: CSS::AtPageRule.new: :$pseudo-class, :$declarations;
 }
 
-multi method at-rule('font-face', :declarations(@ast)!, CSS::MediaQuery :$media-query) {
+multi method at-rule('font-face', :declarations(@ast)!, CSS::MediaQuery :$*media-query) {
     my CSS::Font::Descriptor $font-face .= new: :@ast, :module($!fontface-module);
-    %!rule-media{$font-face} = $_ with $media-query;
+    %!rule-media{$font-face} = $_ with $*media-query;
     @!font-face.push: $font-face;
     %!font-face{$_} = $font-face
         with $font-face.font-family;
@@ -86,9 +87,9 @@ multi method load(:at-rule($_)!, |c) {
     $.at-rule: $type, |$_, |c;
 }
 
-multi method load(:ruleset($ast)!, CSS::MediaQuery :$media-query) {
-    my CSS::Ruleset $rule .= new: :$ast, :$!module, :$media-query;
-    %!rule-media{$rule} = $_ with $media-query;
+multi method load(:ruleset($ast)!, CSS::MediaQuery :$*media-query) {
+    my CSS::Ruleset $rule .= new: :$ast, :$!module, :$*media-query;
+    %!rule-media{$rule} = $_ with $*media-query;
     @!rules.push: $rule;
 }
 
@@ -143,11 +144,17 @@ method page(Bool :$first, Bool :$right, Bool :$left, Str :$margin-box, |c) {
 }
 
 method !media-slot(@stylesheet, %at-rules, $rule) {
-    with %!rule-media{$rule} {
-        my $media-list = .ast;
+    with %!rule-media{$rule} -> $media {
+        my $media-list = $media.ast;
         %at-rules{$media-list} //= do {
             my $at-rule = %(:at-keyw<media>, :$media-list, :rule-list[]);
-            @stylesheet.push: (:$at-rule);
+            with self!media-slot(@stylesheet, %at-rules, $media) {
+                # media is nested
+                .<rule-list>.push: (:$at-rule);
+            }
+            else {
+                @stylesheet.push: (:$at-rule);
+            }
             $at-rule;
         }
     }
@@ -187,11 +194,11 @@ method ast(Bool :$optimize = True, |c) {
     :@stylesheet;
 }
 
-method Str(:$optimize = True, Bool :$terse = True, *%opt) is also<gist> {
+method Str(:$optimize = True, Bool :$pretty = False, *%opt) is also<gist> {
     my Pair $ast = self.ast: :$optimize;
     %opt<color-names> //= True
         unless %opt<color-masks> || %opt<color-values>;
-    my CSS::Writer $writer .= new: :$terse, |%opt;
+    my CSS::Writer $writer .= new: :$pretty, |%opt;
     $writer.write: $ast;
 }
 
