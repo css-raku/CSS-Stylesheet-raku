@@ -6,11 +6,11 @@ use CSS::Units :px;
 plan 4;
 
 my $css = q:to<END>;
-  h1 { font-size:2em; }
-  h2 { font-size:1.5em; }
-  @media screen { h1, h2 { color:blue; } }
-  @media print { h1, h2 { color:red; } }
-  END
+    h1 { font-size:2em; }
+    h2 { font-size:1.5em; }
+    @media screen { h1, h2 { color:blue; } }
+    @media print { h1, h2 { color:red; } }
+    END
 
 my @lines = $css.lines;
 

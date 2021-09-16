@@ -38,5 +38,5 @@ See Also
 Todo
 ----
 
-- At-Rule variants: `@import`, `@document`
+- `@document` At-Rule
 

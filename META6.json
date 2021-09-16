@@ -10,7 +10,7 @@
     "CSS::Module:ver<0.5.8+>",
     "CSS::Properties:ver<0.7.5+>",
     "CSS::Selector::To::XPath",
-    "CSS::Writer:ver<0.2.7>",
+    "CSS::Writer:ver<0.2.8+>",
     "Method::Also"
   ],
   "description": "CSS Stylesheet representation",

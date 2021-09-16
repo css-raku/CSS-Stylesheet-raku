@@ -18,6 +18,7 @@ has CSS::Module $.module = CSS::Module::CSS3.module; # associated CSS module
 has CSS::Module $.fontface-module = $!module.sub-module<@font-face>;
 has CSS::Ruleset @.rules;
 has CSS::MediaQuery %.rule-media{Any};
+has CSS::MediaQuery $!scope;
 has Str $.charset = 'utf-8';
 has Exception @.warnings;
 has CSS::AtPageRule @.at-pages;
@@ -52,12 +53,13 @@ multi method at-rule('charset', :string($_)!) {
     $!charset = .lc;
 }
 
-multi method at-rule('media', :@media-list, :@rule-list,  CSS::MediaQuery :$*media-query) {
+multi method at-rule('media', :@media-list, :@rule-list) {
     my CSS::MediaQuery $media-query .= new: :ast(@media-list)
         if @media-list;
-    %!rule-media{$media-query} = $_ with $*media-query;
+    %!rule-media{$media-query} = $_ with $!scope;
     # filter rule-sets, based on our media settings
     if $media-query ~~ $!media {
+        temp $!scope = $media-query;
         self.load(:$media-query, |$_) for @rule-list;
     }
 }
@@ -66,16 +68,22 @@ multi method at-rule('page', Str :$pseudo-class, List :$declarations) {
     @!at-pages.push: CSS::AtPageRule.new: :$pseudo-class, :$declarations;
 }
 
-multi method at-rule('font-face', :declarations(@ast)!, CSS::MediaQuery :$*media-query) {
+multi method at-rule('font-face', :declarations(@ast)!) {
     my CSS::Font::Descriptor $font-face .= new: :@ast, :module($!fontface-module);
-    %!rule-media{$font-face} = $_ with $*media-query;
+    %!rule-media{$font-face} = $_ with $!scope;
     @!font-face.push: $font-face;
     %!font-face{$_} = $font-face
         with $font-face.font-family;
 }
 
-multi method at-rule('import', Str :$content) {
-    self.parse: $_ with $content;
+multi method at-rule('import', Str :$content, :@media-list) {
+    my CSS::MediaQuery $media-query .= new: :ast(@media-list)
+        if @media-list;
+
+    if $media-query ~~ $!media {
+        temp $!scope = $media-query;
+        self.parse: $_ with $content;
+    }
 }
 
 multi method at-rule($rule, |c) {
@@ -87,9 +95,9 @@ multi method load(:at-rule($_)!, |c) {
     $.at-rule: $type, |$_, |c;
 }
 
-multi method load(:ruleset($ast)!, CSS::MediaQuery :$*media-query) {
-    my CSS::Ruleset $rule .= new: :$ast, :$!module, :$*media-query;
-    %!rule-media{$rule} = $_ with $*media-query;
+multi method load(:ruleset($ast)!) {
+    my CSS::Ruleset $rule .= new: :$ast, :$!module, :media-query($!scope);
+    %!rule-media{$rule} = $_ with $!scope;
     @!rules.push: $rule;
 }
 
@@ -214,7 +222,6 @@ This class is used to build or parse CSS style-sheets, including selectors and r
 =begin code :lang<raku>
 method parse(
     Str $stylesheet,      # stylesheet to parse
-    CSS::Media :$media,   # associated media (optional)
     CSS::Module :$module, # CSS version to use (default CSS::Module::CSS3
     Bool :$warn = True,   # display parse warnings
 ) returns CSS::Stylesheet
@@ -230,8 +237,10 @@ Parses an existing CSS style-sheet.
 =head3 method new (experimental)
 =begin code :lang<raku>
 method new(
-    CSS::Module :$module, # CSS version to use (default CSS::Module::CSS3)
-    Bool :$warn = True,   # display parse warnings
+    CSS::Module :$module,   # CSS version to use (default CSS::Module::CSS3)
+    Bool :$warn = True,     # display parse warnings
+    Bool :$import,          # enable @import rules
+    URI() :$base-url = '.', # Base URL for relative urls (@import and @font-face)
     CSS::Ruleset :@rules,
     CSS::AtPageRules :@at-pages,
 )
