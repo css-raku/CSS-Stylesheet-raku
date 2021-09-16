@@ -8,6 +8,7 @@ use CSS::MediaQuery;
 use CSS::Media;
 use CSS::Module:CSS3;
 use CSS::Ruleset;
+use CSS::Stylesheet::Actions;
 use CSS::Writer;
 use Method::Also;
 use URI;
@@ -25,6 +26,7 @@ has CSS::Font::Descriptor @.font-face;
 # by font-name
 has CSS::Font::Descriptor %!font-face;
 has URI() $.base-url = '.';
+has Bool $.import;
 
 method font-sources($font, |c) {
     CSS::Font::Resources.sources: :$font, :$!base-url, :@.font-face, |c;
@@ -71,8 +73,8 @@ multi method at-rule('font-face', :declarations(@ast)!, CSS::MediaQuery :$media-
         with $font-face.font-family;
 }
 
-multi method at-rule('include', |c) {
-    warn 'todo: @include(...) at rules';
+multi method at-rule('import', Str :$content) {
+    self.parse: $_ with $content;
 }
 
 multi method at-rule($rule, |c) {
@@ -95,12 +97,12 @@ multi method load($_) is default { warn .raku }
 multi method parse(CSS::Stylesheet:U: $css!, Bool :$lax, Bool :$warn = True, |c) {
     self.new(|c).parse($css, :$lax, :$warn);
 }
-multi method parse(CSS::Stylesheet:D: $css!, Bool :$lax, Bool :$warn = True, CSS::Module :$module) {
+multi method parse(CSS::Stylesheet:D: $css!, Bool :$*lax, Bool :$*warn = True, CSS::Module :$module) {
     $!module = $_ with $module;
-    my $actions = $!module.actions.new: :$lax;
+    my $actions = ($!module.actions but CSS::Stylesheet::Actions).new: :$*lax, :$!import;
     given $!module.parse($css, :rule<stylesheet>, :$actions) {
         @!warnings.append: $actions.warnings;
-        if $warn {
+        if $*warn {
             note $_ for $actions.warnings;
         }
         $.load: |.ast;

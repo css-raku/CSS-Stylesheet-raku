@@ -6,7 +6,7 @@
   "build-depends": [
   ],
   "depends": [
-    "CSS::Font::Resources",
+    "CSS::Font::Resources:ver<0.0.4+>",
     "CSS::Module:ver<0.5.8+>",
     "CSS::Properties:ver<0.7.5+>",
     "CSS::Selector::To::XPath",
@@ -23,7 +23,8 @@
     "CSS::MediaQuery": "lib/CSS/MediaQuery.rakumod",
     "CSS::Ruleset": "lib/CSS/Ruleset.rakumod",
     "CSS::Selectors": "lib/CSS/Selectors.rakumod",
-    "CSS::Stylesheet": "lib/CSS/Stylesheet.rakumod"
+    "CSS::Stylesheet": "lib/CSS/Stylesheet.rakumod",
+    "CSS::Stylesheet::Actions": "lib/CSS/Stylesheet/Actions.rakumod"
   },
   "resources": [
   ],
