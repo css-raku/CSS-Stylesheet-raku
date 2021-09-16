@@ -2,6 +2,11 @@ Revision history for CSS-Stylesheet
 
 {{$NEXT}}
 
+0.0.24  2021-09-17T11:54:31+12:00
+    - Fix handling of nested @media rules #2
+    - Handle @import rules, including media-list selections. http, https,
+      and local files only.
+
 0.0.23  2021-09-08T09:27:33+12:00
     - Integrate with CSS::Font::Resources. Add method font-resources()
       which returns a list of matching fonts using @font-face declarations.
@@ -16,8 +21,8 @@ Revision history for CSS-Stylesheet
 
 0.0.20  2021-05-19T13:22:39+12:00
     - Add CSS::MediaQuery
-    - Add documentation for creating a stylesheet from scratch. Uses CSS::MediaQuery along
-      with new coercements for RuleSets and Selectors
+    - Add documentation for creating a stylesheet from scratch. Uses CSS::MediaQuery
+      along with new coercements for RuleSets and Selectors
 
 0.0.19  2021-05-18T11:55:31+12:00
     - Add CSS::AtPageRule and support for '@page' at-rules, including
