@@ -8,7 +8,7 @@ use CSS::MediaQuery;
 use CSS::Media;
 use CSS::Module:CSS3;
 use CSS::Ruleset;
-use CSS::Stylesheet::Actions;
+use CSS::Grammar::Actions;
 use CSS::Writer;
 use Method::Also;
 use URI;
@@ -76,13 +76,20 @@ multi method at-rule('font-face', :declarations(@ast)!) {
         with $font-face.font-family;
 }
 
-multi method at-rule('import', Str :$content, :@media-list) {
+multi method at-rule('import', Str:D :$url!, :@media-list) {
     my CSS::MediaQuery $media-query .= new: :ast(@media-list)
         if @media-list;
 
     if $media-query ~~ $!media {
-        temp $!scope = $media-query;
-        self.parse: $_ with $content;
+        if $!import {
+            my CSS::URI $uri .= new: :$url, :$!base-url;
+            temp $!scope = $media-query;
+            temp $!base-url = $url;
+            self.parse($_) with $uri.get;
+        }
+        else {
+            warn X::CSS::Ignored.new(:str<@import>, :message('ignored'), :explanation('use :import to enable'));
+        }
     }
 }
 
@@ -108,7 +115,7 @@ multi method parse(CSS::Stylesheet:U: $css!, Bool :$lax, Bool :$warn = True, |c)
 }
 multi method parse(CSS::Stylesheet:D: $css!, Bool :$*lax, Bool :$*warn = True, CSS::Module :$module) {
     $!module = $_ with $module;
-    my $actions = ($!module.actions but CSS::Stylesheet::Actions).new: :$*lax, :$!import;
+    my $actions = $!module.actions.new: :$*lax, :$!import;
     given $!module.parse($css, :rule<stylesheet>, :$actions) {
         @!warnings.append: $actions.warnings;
         if $*warn {
@@ -234,7 +241,7 @@ Parses an existing CSS style-sheet.
 
 =item `@page` property sets and page-boxes can be queried using the `page` method (see below).
 
-=head3 method new (experimental)
+=head3 method new
 =begin code :lang<raku>
 method new(
     CSS::Module :$module,   # CSS version to use (default CSS::Module::CSS3)
@@ -327,11 +334,11 @@ method base-url returns URI
 =end code
 A default base URL for the stylesheet.
 
-=head3 method font-source
+=head3 method font-sources
 =begin code :lang<raku>
-method font-sources(CSS::Font() $font, :$formats) returns CSS::Font::Resources
+method font-sources(CSS::Font() $font, :$formats)
 =end code
-Returns a L<CSS::Font::Resources> objects for font matching and selection
+Returns a list of L<CSS::Font::Resources::Source> objects for matching fonts
 
 =begin code :lang<raku>
 my $style = q:to<END>.split(/^^'---'$$/);

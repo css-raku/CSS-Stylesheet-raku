@@ -36,7 +36,7 @@ The `rules` method can then be used to return remaining rule-sets (see below)
 
   * `@page` property sets and page-boxes can be queried using the `page` method (see below).
 
-### method new (experimental)
+### method new
 
 ```raku
 method new(
@@ -135,13 +135,13 @@ method base-url returns URI
 
 A default base URL for the stylesheet.
 
-### method font-source
+### method font-sources
 
 ```raku
-method font-sources(CSS::Font() $font, :$formats) returns CSS::Font::Resources
+method font-sources(CSS::Font() $font, :$formats)
 ```
 
-Returns a [CSS::Font::Resources](https://css-raku.github.io/CSS-Font-Resources-raku/CSS/Font/Resources) objects for font matching and selection
+Returns a list of [CSS::Font::Resources::Source](https://css-raku.github.io/CSS-Font-Resources-raku/CSS/Font/Resources/Source) objects for matching fonts
 
 ```raku
 my $style = q:to<END>.split(/^^'---'$$/);

@@ -22,6 +22,7 @@ is-deeply $stylesheet.Str(:!pretty).lines, (
 $css = q:to<END>;
   @import "t/css/style1.css" screen;
   @import "t/css/style2.css" print;
+  @import "t/css/does-not-exist.css" print;
   h1 {
       color:green;
   }

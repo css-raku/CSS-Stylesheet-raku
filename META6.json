@@ -23,8 +23,7 @@
     "CSS::MediaQuery": "lib/CSS/MediaQuery.rakumod",
     "CSS::Ruleset": "lib/CSS/Ruleset.rakumod",
     "CSS::Selectors": "lib/CSS/Selectors.rakumod",
-    "CSS::Stylesheet": "lib/CSS/Stylesheet.rakumod",
-    "CSS::Stylesheet::Actions": "lib/CSS/Stylesheet/Actions.rakumod"
+    "CSS::Stylesheet": "lib/CSS/Stylesheet.rakumod"
   },
   "resources": [
   ],

@@ -1,6 +1,8 @@
 Revision history for CSS-Stylesheet
 
 {{$NEXT}}
+    - Defer loading of `@import` sources; make it lazy. There's no need
+      to fetch resources which don't match the current media.
 
 0.0.24  2021-09-17T11:54:31+12:00
     - Fix handling of nested @media rules #2
