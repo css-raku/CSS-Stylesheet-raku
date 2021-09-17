@@ -1,6 +1,8 @@
 Revision history for CSS-Stylesheet
 
 {{$NEXT}}
+
+0.0.25  2021-09-18T08:35:14+12:00
     - Defer loading of `@import` sources; make it lazy. There's no need
       to fetch resources which don't match the current media.
 
