@@ -1,6 +1,8 @@
 Revision history for CSS-Stylesheet
 
 {{$NEXT}}
+
+0.0.26  2021-09-20T11:13:03+12:00
     - Fix @media scoping on nested imports
     - Fix base-url path construction on nested imports.
       Note: base-url default has change from '.' to './'
