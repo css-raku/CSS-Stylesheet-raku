@@ -26,7 +26,7 @@ has CSS::AtPageRule @.at-pages;
 has CSS::Font::Descriptor @.font-face;
 # by font-name
 has CSS::Font::Descriptor %!font-face;
-has URI() $.base-url = '.';
+has URI() $.base-url = './';
 has Bool $.import;
 
 method font-sources($font, |c) {
@@ -56,9 +56,10 @@ multi method at-rule('charset', :string($_)!) {
 multi method at-rule('media', :@media-list, :@rule-list) {
     my CSS::MediaQuery $media-query .= new: :ast(@media-list)
         if @media-list;
+    $media-query //= $!scope;
     %!rule-media{$media-query} = $_ with $!scope;
     # filter rule-sets, based on our media settings
-    if $media-query ~~ $!media {
+    if self!media-match($media-query) {
         temp $!scope = $media-query;
         self.load(:$media-query, |$_) for @rule-list;
     }
@@ -76,15 +77,27 @@ multi method at-rule('font-face', :declarations(@ast)!) {
         with $font-face.font-family;
 }
 
+sub base-directory(URI:D() $url) is export(:base-directory) {
+    my $path = $url.path.Str;
+    $path = $path.subst(/<- [/]>+$/, '') || '.';
+    $path = URI::Path.new: :$path;
+    $url.clone: :$path;
+}
+
+method !media-match(CSS::MediaQuery $query) {
+    !$!media.defined || !$query.defined || $query ~~ $!media;
+}
+
 multi method at-rule('import', Str:D :$url!, :@media-list) {
     my CSS::MediaQuery $media-query .= new: :ast(@media-list)
         if @media-list;
+    $media-query //= $!scope;
 
-    if $media-query ~~ $!media {
+    if self!media-match($media-query) {
         if $!import {
             my CSS::URI $uri .= new: :$url, :$!base-url;
             temp $!scope = $media-query;
-            temp $!base-url = $url;
+            temp $!base-url = base-directory($uri.url);
             self.parse($_) with $uri.get;
         }
         else {
@@ -244,10 +257,10 @@ Parses an existing CSS style-sheet.
 =head3 method new
 =begin code :lang<raku>
 method new(
-    CSS::Module :$module,   # CSS version to use (default CSS::Module::CSS3)
-    Bool :$warn = True,     # display parse warnings
-    Bool :$import,          # enable @import rules
-    URI() :$base-url = '.', # Base URL for relative urls (@import and @font-face)
+    CSS::Module :$module,    # CSS version to use (default CSS::Module::CSS3)
+    Bool :$warn = True,      # display parse warnings
+    Bool :$import,           # enable @import rules
+    URI() :$base-url = '/.', # Base URL for relative urls (@import and @font-face)
     CSS::Ruleset :@rules,
     CSS::AtPageRules :@at-pages,
 )

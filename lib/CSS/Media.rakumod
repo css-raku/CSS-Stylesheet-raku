@@ -171,7 +171,12 @@ multi method query(CSS::MediaQuery:D() $query) {
 
 multi method ACCEPTS(CSS::Media:U: $) { True }
 multi method ACCEPTS(CSS::Media:D: CSS::MediaQuery() $media-query) {
-    $.query($media-query);
+    with $media-query {
+        $.query($_);
+    }
+    else {
+        True;
+    }
 }
 
 =begin pod
