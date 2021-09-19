@@ -39,7 +39,9 @@ multi method font-face(Str $family) { %!font-face{$family} }
 ##constant DisplayNode = ...; # not handled by Rakudo yet
 sub DisplayNone { state $ //= CSS::Properties.new: :display<none>; }
 
-submethod TWEAK {
+submethod TWEAK(:$base-url) {
+    $!base-url = base-directory($_)
+        with $base-url;
     for @!rules -> $rule {
         %!rule-media{$rule} = $_ with $rule.media-query;
     }
@@ -77,7 +79,7 @@ multi method at-rule('font-face', :declarations(@ast)!) {
         with $font-face.font-family;
 }
 
-sub base-directory(URI:D() $url) is export(:base-directory) {
+sub base-directory(URI:D() $url) {
     my $path = $url.path.Str;
     $path = $path.subst(/<- [/]>+$/, '') || '.';
     $path = URI::Path.new: :$path;

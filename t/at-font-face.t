@@ -11,7 +11,7 @@ END
 
 my @lines = $css.lines;
 
-my CSS::Stylesheet $stylesheet .= new(:base-url<t>).parse($css);
+my CSS::Stylesheet $stylesheet .= new(:base-url<t/>).parse($css);
 is $stylesheet.rules[0].xpath, '//p';
 is +$stylesheet.font-face, 2, 'font face rules loaded';
 isa-ok $stylesheet.font-face[0], 'CSS::Font::Descriptor';
