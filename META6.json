@@ -11,7 +11,8 @@
     "CSS::Properties:ver<0.7.5+>",
     "CSS::Selector::To::XPath",
     "CSS::Writer:ver<0.2.8+>",
-    "Method::Also"
+    "Method::Also",
+    "URI:ver<0.3.3+>"
   ],
   "description": "CSS Stylesheet representation",
   "license": "Artistic-2.0",

@@ -39,8 +39,8 @@ multi method font-face(Str $family) { %!font-face{$family} }
 ##constant DisplayNode = ...; # not handled by Rakudo yet
 sub DisplayNone { state $ //= CSS::Properties.new: :display<none>; }
 
-submethod TWEAK(:$base-url) {
-    $!base-url = base-directory($_)
+submethod TWEAK(URI() :$base-url) {
+    $!base-url = .directory()
         with $base-url;
     for @!rules -> $rule {
         %!rule-media{$rule} = $_ with $rule.media-query;
@@ -79,13 +79,6 @@ multi method at-rule('font-face', :declarations(@ast)!) {
         with $font-face.font-family;
 }
 
-sub base-directory(URI:D() $url) {
-    my $path = $url.path.Str;
-    $path = $path.subst(/<- [/]>+$/, '') || '.';
-    $path = URI::Path.new: :$path;
-    $url.clone: :$path;
-}
-
 method !media-match(CSS::MediaQuery $query) {
     !$!media.defined || !$query.defined || $query ~~ $!media;
 }
@@ -99,7 +92,7 @@ multi method at-rule('import', Str:D :$url!, :@media-list) {
         if $!import {
             my CSS::URI $uri .= new: :$url, :$!base-url;
             temp $!scope = $media-query;
-            temp $!base-url = base-directory($uri.url);
+            temp $!base-url = $uri.url.directory();
             self.parse($_) with $uri.get;
         }
         else {
