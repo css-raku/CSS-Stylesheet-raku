@@ -1,5 +1,5 @@
 #| Overall CSS Stylesheet representation
-unit class CSS::Stylesheet:ver<0.0.26>;
+unit class CSS::Stylesheet:ver<0.0.27>;
 
 use CSS::AtPageRule;
 use CSS::Font::Descriptor;
