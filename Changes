@@ -1,6 +1,8 @@
 Revision history for CSS-Stylesheet
 
 {{$NEXT}}
+    - Rename option :import -> :imports
+    - Disable fontconfig tests by default. Help tests pass on Windows
 
 0.0.26  2021-09-20T11:13:03+12:00
     - Fix @media scoping on nested imports

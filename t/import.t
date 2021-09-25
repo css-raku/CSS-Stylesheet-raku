@@ -12,7 +12,7 @@ my $css = q:to<END>;
   }
   END
 
-my CSS::Stylesheet $stylesheet .= new(:import).parse($css);
+my CSS::Stylesheet $stylesheet .= new(:imports).parse($css);
 
 is-deeply $stylesheet.Str(:!pretty).lines, (
       'h2 { color:blue; }',
@@ -28,7 +28,7 @@ $css = q:to<END>;
   }
   END
 
-$stylesheet .= new(:import).parse($css);
+$stylesheet .= new(:imports).parse($css);
 is-deeply $stylesheet.Str.lines, (
       '@media screen { h2 { color:green; } }',
       '@media print { h2 { color:blue; } }',
@@ -36,7 +36,7 @@ is-deeply $stylesheet.Str.lines, (
   ), 'uinfiltered import';
 
 my CSS::Media $media .= new: :type<screen>, :width(640px), :height(480px);
-$stylesheet .= new(:import, :$media).parse($css);
+$stylesheet .= new(:imports, :$media).parse($css);
 is-deeply $stylesheet.Str.lines, (
       '@media screen { h2 { color:green; } }',
       'h1 { color:green; }',

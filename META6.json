@@ -6,7 +6,7 @@
   "build-depends": [
   ],
   "depends": [
-    "CSS::Font::Resources:ver<0.0.4+>",
+    "CSS::Font::Resources:ver<0.0.5+>",
     "CSS::Module:ver<0.5.8+>",
     "CSS::Properties:ver<0.7.5+>",
     "CSS::Selector::To::XPath",

@@ -19,13 +19,18 @@ is $stylesheet.font-face('Para').Str, "font-family:'Para'; src:url('myfonts/para
 is $stylesheet.font-face[0].Str, "font-family:'Print'; src:url('myfonts/print.otf');";
 is-deeply $stylesheet.Str.lines, @lines.List, 'Str method';
 
-my @sources = $stylesheet.font-sources("12pt Para");
-is +@sources, 2;
-given @sources.head {
-    .&isa-ok: 'CSS::Font::Resources::Source::Url';
-    .url.Str.&is: 't/myfonts/para.otf';
-    .family.&is: 'Para';
-    .format.&is: 'opentype';
+if %*ENV<TEST_FONT_CONFIG> {
+    my @sources = $stylesheet.font-sources("12pt Para");
+    is +@sources, 2;
+    given @sources.head {
+        .&isa-ok: 'CSS::Font::Resources::Source::Url';
+        .url.Str.&is: 't/myfonts/para.otf';
+        .family.&is: 'Para';
+        .format.&is: 'opentype';
+    }
+}
+else {
+    skip 'set TEST_FONT_CONFIG=1 to enable fontconfig tests', 5;
 }
 
 done-testing;
