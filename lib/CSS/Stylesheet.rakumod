@@ -27,7 +27,7 @@ has CSS::Font::Descriptor @.font-face;
 # by font-name
 has CSS::Font::Descriptor %!font-face;
 has URI() $.base-url = './';
-has Bool $.import;
+has Bool $.imports;
 
 method font-sources($font, |c) {
     CSS::Font::Resources.sources: :$font, :$!base-url, :@.font-face, |c;
@@ -89,14 +89,14 @@ multi method at-rule('import', Str:D :$url!, :@media-list) {
     $media-query //= $!scope;
 
     if self!media-match($media-query) {
-        if $!import {
+        if $!imports {
             my CSS::URI $uri .= new: :$url, :$!base-url;
             temp $!scope = $media-query;
             temp $!base-url = $uri.url.directory();
             self.parse($_) with $uri.get;
         }
         else {
-            warn X::CSS::Ignored.new(:str<@import>, :message('ignored'), :explanation('use :import to enable'));
+            warn X::CSS::Ignored.new(:str<@import>, :message('ignored'), :explanation('use :imports to enable'));
         }
     }
 }
@@ -123,7 +123,7 @@ multi method parse(CSS::Stylesheet:U: $css!, Bool :$lax, Bool :$warn = True, |c)
 }
 multi method parse(CSS::Stylesheet:D: $css!, Bool :$*lax, Bool :$*warn = True, CSS::Module :$module) {
     $!module = $_ with $module;
-    my $actions = $!module.actions.new: :$*lax, :$!import;
+    my $actions = $!module.actions.new: :$*lax;
     given $!module.parse($css, :rule<stylesheet>, :$actions) {
         @!warnings.append: $actions.warnings;
         if $*warn {
@@ -254,7 +254,7 @@ Parses an existing CSS style-sheet.
 method new(
     CSS::Module :$module,    # CSS version to use (default CSS::Module::CSS3)
     Bool :$warn = True,      # display parse warnings
-    Bool :$import,           # enable @import rules
+    Bool :$imports,           # enable @import rules
     URI() :$base-url = '/.', # Base URL for relative urls (@import and @font-face)
     CSS::Ruleset :@rules,
     CSS::AtPageRules :@at-pages,
