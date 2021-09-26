@@ -24,6 +24,13 @@ Classes
 
   * [CSS::AtPageRule](https://css-raku.github.io/CSS-Stylesheet-raku/CSS/AtPageRule) - CSS @page {...} representation
 
+Scripts
+-------
+
+* `css-tidy.raku [--/optimize] [--pretty] [--imports] [--/warn] [--lax] [--color=names|values|masks] <file> [<output>]`
+
+Rebuild a CSS Style-sheet with various checks and optimizations.
+
 
 See Also
 --------

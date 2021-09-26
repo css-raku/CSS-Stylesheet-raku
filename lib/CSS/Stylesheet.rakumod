@@ -1,5 +1,5 @@
 #| Overall CSS Stylesheet representation
-unit class CSS::Stylesheet:ver<0.0.27>;
+unit class CSS::Stylesheet:ver<0.0.28>;
 
 use CSS::AtPageRule;
 use CSS::Font::Descriptor;
@@ -254,7 +254,7 @@ Parses an existing CSS style-sheet.
 method new(
     CSS::Module :$module,    # CSS version to use (default CSS::Module::CSS3)
     Bool :$warn = True,      # display parse warnings
-    Bool :$imports,           # enable @import rules
+    Bool :$imports,          # enable loading of @import rules
     URI() :$base-url = '/.', # Base URL for relative urls (@import and @font-face)
     CSS::Ruleset :@rules,
     CSS::AtPageRules :@at-pages,

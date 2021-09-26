@@ -42,7 +42,7 @@ The `rules` method can then be used to return remaining rule-sets (see below)
 method new(
     CSS::Module :$module,    # CSS version to use (default CSS::Module::CSS3)
     Bool :$warn = True,      # display parse warnings
-    Bool :$import,           # enable @import rules
+    Bool :$imports,          # enable loading of @import rules
     URI() :$base-url = '/.', # Base URL for relative urls (@import and @font-face)
     CSS::Ruleset :@rules,
     CSS::AtPageRules :@at-pages,

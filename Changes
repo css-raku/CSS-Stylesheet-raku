@@ -2,6 +2,9 @@ Revision history for CSS-Stylesheet
 
 {{$NEXT}}
 
+0.0.28  2021-09-27T07:53:16+13:00
+    - Import and update script css-rewriter.raku from CSS
+
 0.0.27  2021-09-25T14:46:24+12:00
     - Rename option :import -> :imports
     - Disable fontconfig tests by default. Help tests pass on Windows
