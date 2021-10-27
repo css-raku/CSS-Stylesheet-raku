@@ -148,7 +148,7 @@ our sub merge-properties(@prop-sets, CSS::Properties $props = CSS::Properties.ne
     $props;
 }
 
-method page(Bool :$first, Bool :$right, Bool :$left, Str :$margin-box, |c) {
+method page-properties(Bool :$first, Bool :$right, Bool :$left, Str :$margin-box, |c) {
     my CSS::AtPageRule @page-rules = @!at-pages.grep: {
         given .pseudo-class {
             when 'first' { $first }
@@ -165,6 +165,8 @@ method page(Bool :$first, Bool :$right, Bool :$left, Str :$margin-box, |c) {
         ?? merge-properties(@prop-sets, CSS::Properties.new(|c))
         !! CSS::Properties;
 }
+
+method page(|c) is DEPRECATED<page-properties> { $.page-properties(|c) } 
 
 method !media-slot(@stylesheet, %at-rules, $rule) {
     with %!rule-media{$rule} -> $media {
@@ -276,11 +278,11 @@ say $stylesheet.Str;
 =end code
 See L<CSS::Ruleset>, L<CSS::AtPageRule>, and L<CSS::MediaQuery> for individual constructors and coercement rules.
 
-=head3 method page
+=head3 method page-properties
 
 =begin code :lang<raku>
-method page(Bool :$first, Bool :$right, Bool :$left,
-            Str :$margin-box --> CSS::Properties)
+method page-properties(Bool :$first, Bool :$right, Bool :$left,
+                       Str :$margin-box --> CSS::Properties)
 =end code
 Computes an `@page` at rule property list. Optionally with
 a `:first`, `:left`, or `:right` page selection.
@@ -321,7 +323,7 @@ my CSS::Stylesheet $stylesheet .= parse: q:to<END>;
     }
     END
 
-my CSS::Properties:D $page-props = $stylesheet.page: :units<mm>;
+my CSS::Properties:D $page-props = $stylesheet.page-properties: :units<mm>;
 my CSS::PageBox $box .= new: :css($page-props);
 say $box.margin;  # [297, 210, 0, 0]
 say $box.border;  # [294, 207, 3, 3]

@@ -1,6 +1,7 @@
 Revision history for CSS-Stylesheet
 
 {{$NEXT}}
+   - Deprecate page() method in favour of page-properties()
 
 0.0.28  2021-09-27T07:53:16+13:00
     - Import and update script css-rewriter.raku from CSS

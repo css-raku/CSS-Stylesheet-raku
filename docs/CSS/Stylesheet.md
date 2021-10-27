@@ -66,11 +66,11 @@ say $stylesheet.Str;
 
 See [CSS::Ruleset](https://css-raku.github.io/CSS-Stylesheet-raku/CSS/Ruleset), [CSS::AtPageRule](https://css-raku.github.io/CSS-Stylesheet-raku/CSS/AtPageRule), and [CSS::MediaQuery](https://css-raku.github.io/CSS-Stylesheet-raku/CSS/MediaQuery) for individual constructors and coercement rules.
 
-### method page
+### method page-properties
 
 ```raku
-method page(Bool :$first, Bool :$right, Bool :$left,
-            Str :$margin-box --> CSS::Properties)
+method page-properties(Bool :$first, Bool :$right, Bool :$left,
+                       Str :$margin-box --> CSS::Properties)
 ```
 
 Computes an `@page` at rule property list. Optionally with a `:first`, `:left`, or `:right` page selection.

@@ -27,7 +27,7 @@ Methods
 
 ### method parse
 
-    method parse(Str :$css!) returns CSS::Ruleset;
+    method parse(Str $css!) returns CSS::Ruleset;
 
 Parses a single rule-set; creates a rule-set object.
 

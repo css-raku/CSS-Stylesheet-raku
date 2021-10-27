@@ -58,7 +58,7 @@ class Specificity {
     multi method calc(:op($)!)             {}
 
     multi method calc(*%frag) is default {
-        warn "ignoring {%frag.perl}";
+        warn "ignoring {%frag.raku}";
     }
 
 }
@@ -69,13 +69,13 @@ class Specificity {
 method specificity returns Version {
     $!specificity //= do {
         my Specificity $spec .= new;
-        $spec.calc(|%!ast);
+        $spec.calc: |%!ast;
     }
 }
 
 #| Returns an XPath translation of the selector
 method xpath returns Str {
-    $!to-xml.xpath(%!ast);
+    $!to-xml.xpath: %!ast;
 }
 
 multi method COERCE(Str $selectors) { self.parse: $selectors }
