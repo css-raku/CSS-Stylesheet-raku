@@ -13,7 +13,7 @@ use CSS::Writer;
 use Method::Also;
 use URI;
 
-has CSS::Media $.media;
+has CSS::Media $.media; # Selection media
 has CSS::Module $.module = CSS::Module::CSS3.module; # associated CSS module
 has CSS::Module $.fontface-module = $!module.sub-module<@font-face>;
 has CSS::Ruleset @.rules;
@@ -148,7 +148,11 @@ our sub merge-properties(@prop-sets, CSS::Properties $props = CSS::Properties.ne
     $props;
 }
 
-method page-properties(Bool :$first, Bool :$right, Bool :$left, Str :$margin-box, |c) {
+method page-properties(
+    Bool :$first, Bool :$right, Bool :$left,
+    Str :$margin-box, |c
+    --> CSS::Properties
+) {
     my CSS::AtPageRule @page-rules = @!at-pages.grep: {
         given .pseudo-class {
             when 'first' { $first }
@@ -351,7 +355,11 @@ method font-sources(CSS::Font() $font, :$formats)
 Returns a list of L<CSS::Font::Resources::Source> objects for matching fonts
 
 =begin code :lang<raku>
-my $style = q:to<END>.split(/^^'---'$$/);
+use CSS::Stylesheet;
+use CSS::Font;
+use CSS::Font::Resources::Source;
+
+my $style = q:to<END>;
     @font-face {
       font-family: "DejaVu Sans";
       src: url("fonts/DejaVuSans.ttf");
@@ -373,10 +381,13 @@ my $style = q:to<END>.split(/^^'---'$$/);
       font-style: oblique;
     }
     END
-    my CSS::Stylesheet $css .= parse($style);
-    my CSS::Font() $font = "bold italic 12pt DejaVu Sans";
-    my CSS::Font::Resources::Sources @srcs = $css-font-sources($font);
-    say @src.head.Str; # fonts/DejaVuSans-BoldOblique.ttf
+
+my CSS::Stylesheet $css .= parse($style);
+my CSS::Font() $font = "bold italic 12pt DejaVu Sans";
+my CSS::Font::Resources::Source @srcs = $css.font-sources($font);
+say @srcs.head.Str; # ./fonts/DejaVuSans-BoldOblique.ttf
+
+
 =end code
 
 =end pod

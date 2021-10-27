@@ -111,7 +111,7 @@ my CSS::Stylesheet $stylesheet .= parse: q:to<END>;
     }
     END
 
-my CSS::Properties:D $page-props = $stylesheet.page: :units<mm>;
+my CSS::Properties:D $page-props = $stylesheet.page-properties: :units<mm>;
 my CSS::PageBox $box .= new: :css($page-props);
 say $box.margin;  # [297, 210, 0, 0]
 say $box.border;  # [294, 207, 3, 3]
@@ -144,7 +144,11 @@ method font-sources(CSS::Font() $font, :$formats)
 Returns a list of [CSS::Font::Resources::Source](https://css-raku.github.io/CSS-Font-Resources-raku/CSS/Font/Resources/Source) objects for matching fonts
 
 ```raku
-my $style = q:to<END>.split(/^^'---'$$/);
+use CSS::Stylesheet;
+use CSS::Font;
+use CSS::Font::Resources::Source;
+
+my $style = q:to<END>;
     @font-face {
       font-family: "DejaVu Sans";
       src: url("fonts/DejaVuSans.ttf");
@@ -166,9 +170,10 @@ my $style = q:to<END>.split(/^^'---'$$/);
       font-style: oblique;
     }
     END
-    my CSS::Stylesheet $css .= parse($style);
-    my CSS::Font() $font = "bold italic 12pt DejaVu Sans";
-    my CSS::Font::Resources::Sources @srcs = $css-font-sources($font);
-    say @src.head.Str; # fonts/DejaVuSans-BoldOblique.ttf
+
+my CSS::Stylesheet $css .= parse($style);
+my CSS::Font() $font = "bold italic 12pt DejaVu Sans";
+my CSS::Font::Resources::Source @srcs = $css.font-sources($font);
+say @srcs.head.Str; # ./fonts/DejaVuSans-BoldOblique.ttf
 ```
 
