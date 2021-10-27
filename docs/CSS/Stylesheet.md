@@ -148,7 +148,7 @@ use CSS::Stylesheet;
 use CSS::Font;
 use CSS::Font::Resources::Source;
 
-my $style = q:to<END>;
+my CSS::Stylesheet() $css = q:to<END>;
     @font-face {
       font-family: "DejaVu Sans";
       src: url("fonts/DejaVuSans.ttf");
@@ -171,7 +171,6 @@ my $style = q:to<END>;
     }
     END
 
-my CSS::Stylesheet $css .= parse($style);
 my CSS::Font() $font = "bold italic 12pt DejaVu Sans";
 my CSS::Font::Resources::Source @srcs = $css.font-sources($font);
 say @srcs.head.Str; # ./fonts/DejaVuSans-BoldOblique.ttf

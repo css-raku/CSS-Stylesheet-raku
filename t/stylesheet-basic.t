@@ -34,7 +34,7 @@ my $css = q:to<END>;
 END
 
 my CSS::Media $media .= new: :type<screen>, :width(480px), :height(640px), :color;
-my CSS::Stylesheet $stylesheet .= new(:$media).parse($css);
+my CSS::Stylesheet $stylesheet .= parse($css, :$media);
 is $stylesheet.media, 'screen';
 is $stylesheet.rules[0].xpath, '//html | //body';
 is $stylesheet.rules[0].properties, 'background:white; border:0; color:black;';

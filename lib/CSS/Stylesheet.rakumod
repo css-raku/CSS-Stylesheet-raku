@@ -118,13 +118,13 @@ multi method load(:ruleset($ast)!) {
 
 multi method load($_) is default { warn .raku }
 
-multi method parse(CSS::Stylesheet:U: $css!, Bool :$lax, Bool :$warn = True, |c) {
-    self.new(|c).parse($css, :$lax, :$warn);
+multi method parse(CSS::Stylesheet:U: $str!, Bool :$lax, Bool :$warn = True, |c) {
+    self.new(|c).parse($str, :$lax, :$warn);
 }
-multi method parse(CSS::Stylesheet:D: $css!, Bool :$*lax, Bool :$*warn = True, CSS::Module :$module) {
+multi method parse(CSS::Stylesheet:D: Str:D() $str!, Bool :$*lax, Bool :$*warn = True, CSS::Module :$module) {
     $!module = $_ with $module;
     my $actions = $!module.actions.new: :$*lax;
-    given $!module.parse($css, :rule<stylesheet>, :$actions) {
+    given $!module.parse($str, :rule<stylesheet>, :$actions) {
         @!warnings.append: $actions.warnings;
         if $*warn {
             note $_ for $actions.warnings;
@@ -133,6 +133,8 @@ multi method parse(CSS::Stylesheet:D: $css!, Bool :$*lax, Bool :$*warn = True, C
     }
     self;
 }
+
+multi method COERCE(Str:D() $str) { self.parse: $str }
 
 our sub merge-properties(@prop-sets, CSS::Properties $props = CSS::Properties.new) {
     my %seen  = $props.properties.map(* => 1);
@@ -359,7 +361,7 @@ use CSS::Stylesheet;
 use CSS::Font;
 use CSS::Font::Resources::Source;
 
-my $style = q:to<END>;
+my CSS::Stylesheet() $css = q:to<END>;
     @font-face {
       font-family: "DejaVu Sans";
       src: url("fonts/DejaVuSans.ttf");
@@ -382,12 +384,9 @@ my $style = q:to<END>;
     }
     END
 
-my CSS::Stylesheet $css .= parse($style);
 my CSS::Font() $font = "bold italic 12pt DejaVu Sans";
 my CSS::Font::Resources::Source @srcs = $css.font-sources($font);
 say @srcs.head.Str; # ./fonts/DejaVuSans-BoldOblique.ttf
-
-
 =end code
 
 =end pod
