@@ -1,5 +1,5 @@
 #| Overall CSS Stylesheet representation
-unit class CSS::Stylesheet:ver<0.0.28>;
+unit class CSS::Stylesheet:ver<0.0.29>;
 
 use CSS::AtPageRule;
 use CSS::Font::Descriptor;
@@ -28,9 +28,10 @@ has CSS::Font::Descriptor @.font-face;
 has CSS::Font::Descriptor %!font-face;
 has URI() $.base-url = './';
 has Bool $.imports;
+has Str $.font-family = 'times-roman';
 
 method font-sources($font, |c) {
-    CSS::Font::Resources.sources: :$font, :$!base-url, :@.font-face, |c;
+    CSS::Font::Resources.sources: :$font, :$!base-url, :@!font-face, :$!font-family, |c;
 }
 
 multi method font-face { @!font-face }
