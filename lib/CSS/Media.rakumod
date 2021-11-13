@@ -272,7 +272,7 @@ Computed device aspect ratio. Simply `device-width` / `device-height`.
 =head3 method have
 
     use CSS::Stylesheet::Media :MediaProp;
-    method has(MediaProp $prop, Numeric $val?) returns Bool
+    method have(MediaProp $prop, Numeric $val?) returns Bool
 
 Returns True if the constraint is matched.
 

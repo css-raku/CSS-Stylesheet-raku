@@ -254,7 +254,7 @@ Parses an existing CSS style-sheet.
 
 =item Filters any `@media` scoped rule-sets that do not match the associated media object.
 
-=items The `rules` method can then be used to return remaining rule-sets (see below)
+=item The `rules` method can then be used to return remaining rule-sets (see below)
 
 =item `@page` property sets and page-boxes can be queried using the `page` method (see below).
 

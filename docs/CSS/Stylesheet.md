@@ -1,5 +1,5 @@
 [[Raku CSS Project]](https://css-raku.github.io)
- / [[CSS-Stylesheet]](https://css-raku.github.io/CSS-Stylesheet-raku)
+ / [[CSS-Stylesheet Module]](https://css-raku.github.io/CSS-Stylesheet-raku)
  / [CSS::Stylesheet](https://css-raku.github.io/CSS-Stylesheet-raku/CSS/Stylesheet)
 
 class CSS::Stylesheet
@@ -29,10 +29,7 @@ Parses an existing CSS style-sheet.
 
   * Filters any `@media` scoped rule-sets that do not match the associated media object.
 
-items
-=====
-
-The `rules` method can then be used to return remaining rule-sets (see below)
+  * The `rules` method can then be used to return remaining rule-sets (see below)
 
   * `@page` property sets and page-boxes can be queried using the `page` method (see below).
 

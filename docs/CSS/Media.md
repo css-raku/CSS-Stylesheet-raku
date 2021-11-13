@@ -1,5 +1,5 @@
 [[Raku CSS Project]](https://css-raku.github.io)
- / [[CSS-Stylesheet]](https://css-raku.github.io/CSS-Stylesheet-raku)
+ / [[CSS-Stylesheet Module]](https://css-raku.github.io/CSS-Stylesheet-raku)
  / [CSS::Media](https://css-raku.github.io/CSS-Stylesheet-raku/CSS/Media)
 
 class CSS::Media
@@ -102,7 +102,7 @@ Computed device aspect ratio. Simply `device-width` / `device-height`.
 ### method have
 
     use CSS::Stylesheet::Media :MediaProp;
-    method has(MediaProp $prop, Numeric $val?) returns Bool
+    method have(MediaProp $prop, Numeric $val?) returns Bool
 
 Returns True if the constraint is matched.
 
