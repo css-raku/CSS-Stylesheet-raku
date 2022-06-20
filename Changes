@@ -2,6 +2,9 @@ Revision history for CSS-Stylesheet
 
 {{$NEXT}}
 
+0.1.0  2022-06-21T10:47:51+12:00
+   - Uploaded to zef ecosystem
+
 0.0.29  2021-11-10T07:50:48+13:00
    - Deprecate page() method in favour of page-properties()
    - Add COERCE() method for implicit parse from string
