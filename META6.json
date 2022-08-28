@@ -7,7 +7,7 @@
   ],
   "depends": [
     "CSS::Font::Resources:ver<0.0.5+>",
-    "CSS::Module:ver<0.5.8+>",
+    "CSS::Module:ver<0.6.3+>",
     "CSS::Properties:ver<0.7.5+>",
     "CSS::Selector::To::XPath",
     "CSS::Writer:ver<0.2.8+>",

@@ -18,6 +18,7 @@ css-tidy.raku - tidy/optimise and rewrite CSS stylesheets
     --color=masks     # write colors as masks #77F
     --color=values    # write colors as rgb(...) rgba(...)
     --lax             # allow any functions and units
+    --module=css3|svg # CSS conformance mode
 
 =head1 DESCRIPTION
 
@@ -26,7 +27,12 @@ This script parses and rewrites CSS stylesheets.
 =end pod
 
 use CSS::Stylesheet;
+use CSS::Module;
+use CSS::Module::CSS3;
+use CSS::Module::SVG;
+
 subset ColorOpt of Str where 'masks'|'names'|'values'|Str:U;
+subset ModuleOpt of Str:D where .lc ~~ 'css3'|'svg';
 
 sub MAIN($file = '-',            #= Input CSS Stylesheet path ('-' for stdin)
          $output?,               #= Processed stylesheet path (stdout)
@@ -37,13 +43,15 @@ sub MAIN($file = '-',            #= Input CSS Stylesheet path ('-' for stdin)
          Bool :$warn = True,     #= Output warnings
          Bool :$lax,             #= Allow any functions and units
          ColorOpt :$color,       #= Color output mode; 'names', 'masks', or 'values',
+         ModuleOpt :module($mod) = 'css3', #= Property set to use CSS3, or SVG
         ) {
 
     my %opt = :$pretty, :optimize(!$atomize);
     %opt{'color-' ~ $_} = True with $color;
 
     given ($file eq '-' ?? $*IN !! $file.IO).slurp {
-        my CSS::Stylesheet $style .= new: :$base-url, :$imports;
+        my CSS::Module:D $module = ::('CSS::Module')::($mod.uc).module;
+        my CSS::Stylesheet $style .= new: :$base-url, :$imports, :$module;
         $style.parse: $_, :$lax, :$warn;
         my $out = $style.Str: |%opt;
 
