@@ -27,7 +27,7 @@ Classes
 Scripts
 -------
 
-* `css-tidy.raku [--/optimize] [--pretty] [--imports] [--/warn] [--lax] [--color=names|values|masks] [--module=css3|svg] <file> [<output>]`
+* `css-tidy.raku [--/optimize] [--pretty] [--imports] [--/warn] [--lax] [--allow property ...] [--color=names|values|masks] [--module=css3|svg] <file> [<output>]`
 
 Rebuild a CSS Style-sheet with various checks and optimizations.
 

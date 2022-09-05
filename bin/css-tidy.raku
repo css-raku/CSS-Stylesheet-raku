@@ -12,13 +12,14 @@ css-tidy.raku - tidy/optimise and rewrite CSS stylesheets
     --atomize         # break into component properties
     --imports         # include imported styesheets
     --base-url=path   # set base url for imports  
-    --pretty          # enable multiline property lists
+    --pretty          # enable multi-line property lists
     --/warn           # disable warnings
     --color=names     # write color names (if possible)
     --color=masks     # write colors as masks #77F
     --color=values    # write colors as rgb(...) rgba(...)
     --lax             # allow any functions and units
     --module=css3|svg # CSS conformance mode
+    --allow=property  # permit unknown properties (repeatable)
 
 =head1 DESCRIPTION
 
@@ -41,8 +42,9 @@ sub MAIN($file = '-',            #= Input CSS Stylesheet path ('-' for stdin)
          Bool :$imports = False, #= Expand imported stylesheets
          Bool :$pretty = False,  #= Multi line property output
          Bool :$warn = True,     #= Output warnings
-         Bool :$lax,             #= Allow any functions and units
-         ColorOpt :$color,       #= Color output mode; 'names', 'masks', or 'values',
+         :@allow,                #= Addtional properties to allow
+         Bool :$lax = @allow.so, #= Allow any functions and units
+         ColorOpt :$color,       #= Color output mode: 'names', 'masks', or 'values',
          ModuleOpt :module($mod) = 'css3', #= Property set to use CSS3, or SVG
         ) {
 
@@ -50,8 +52,11 @@ sub MAIN($file = '-',            #= Input CSS Stylesheet path ('-' for stdin)
     %opt{'color-' ~ $_} = True with $color;
 
     given ($file eq '-' ?? $*IN !! $file.IO).slurp {
-        my CSS::Module:D $module = ::('CSS::Module')::($mod.uc).module;
+        my %extensions = @allow.map: { $_ => %() };
+        dd %extensions;
+        my CSS::Module:D $module = ::('CSS::Module')::($mod.uc).module: :%extensions;
         my CSS::Stylesheet $style .= new: :$base-url, :$imports, :$module;
+        dd $_ => $$style.module.property-metadata{$_} for %extensions.keys;
         $style.parse: $_, :$lax, :$warn;
         my $out = $style.Str: |%opt;
 
