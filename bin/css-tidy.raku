@@ -18,10 +18,11 @@ css-tidy.raku - tidy/optimise and rewrite CSS stylesheets
     --color=masks     # write colors as masks #77F
     --color=values    # write colors as rgb(...) rgba(...)
     --lax             # allow any functions and units
-    --module=css3|svg # CSS conformance mode
-    --allow=property  # permit unknown properties (repeatable)
-
+    --module=css1|css21|css3|svg # CSS conformance mode
+    --allow=property  # Allow particular properties (repeatable)
+    --allow-any       # All any unknown properties
 =head1 DESCRIPTION
+
 
 This script parses and rewrites CSS stylesheets.
 
@@ -29,22 +30,25 @@ This script parses and rewrites CSS stylesheets.
 
 use CSS::Stylesheet;
 use CSS::Module;
+use CSS::Module::CSS1;
+use CSS::Module::CSS21;
 use CSS::Module::CSS3;
 use CSS::Module::SVG;
 
 subset ColorOpt of Str where 'masks'|'names'|'values'|Str:U;
-subset ModuleOpt of Str:D where .lc ~~ 'css3'|'svg';
+subset ModuleOpt of Str:D where .lc ~~ 'css1'|'css21'|'css3'|'svg';
 
-sub MAIN($file = '-',            #= Input CSS Stylesheet path ('-' for stdin)
-         $output?,               #= Processed stylesheet path (stdout)
+sub MAIN($file = '-',              #= Input CSS Stylesheet path ('-' for stdin)
+         $output?,                 #= Processed stylesheet path (stdout)
          Str :$base-url = $file eq '-' ?? './' !! $file;
-         Bool :$atomize      ,   #= Break into component properties
-         Bool :$imports = False, #= Expand imported stylesheets
-         Bool :$pretty = False,  #= Multi line property output
-         Bool :$warn = True,     #= Output warnings
-         :@allow,                #= Addtional properties to allow
-         Bool :$lax = @allow.so, #= Allow any functions and units
-         ColorOpt :$color,       #= Color output mode: 'names', 'masks', or 'values',
+         Bool :$atomize      ,     #= Break into component properties
+         Bool :$imports = False,   #= Expand imported stylesheets
+         Bool :$pretty = False,    #= Multi line property output
+         Bool :$warn = True,       #= Output warnings
+         :@allow,                  #= Allow particular properties
+         Bool :allow-any($vivify), #= Allow any properties              
+         Bool :$lax = $vivify || @allow.so,   #= Allow any functions and units
+         ColorOpt :$color,         #= Color output mode: 'names', 'masks', or 'values',
          ModuleOpt :module($mod) = 'css3', #= Property set to use CSS3, or SVG
         ) {
 
@@ -53,10 +57,8 @@ sub MAIN($file = '-',            #= Input CSS Stylesheet path ('-' for stdin)
 
     given ($file eq '-' ?? $*IN !! $file.IO).slurp {
         my %extensions = @allow.map: { $_ => %() };
-        dd %extensions;
-        my CSS::Module:D $module = ::('CSS::Module')::($mod.uc).module: :%extensions;
+        my CSS::Module:D $module = ::('CSS::Module')::($mod.uc).module: :%extensions, :$vivify;
         my CSS::Stylesheet $style .= new: :$base-url, :$imports, :$module;
-        dd $_ => $$style.module.property-metadata{$_} for %extensions.keys;
         $style.parse: $_, :$lax, :$warn;
         my $out = $style.Str: |%opt;
 

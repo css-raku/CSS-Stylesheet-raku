@@ -1,8 +1,11 @@
 Revision history for CSS-Stylesheet
 
 {{$NEXT}}
-   - Add css-tidy.raku --allow option; to pass-through
-     unknown properties
+
+0.1.1  2022-09-07T07:27:19+12:00
+   - Add css-tidy.raku options:
+     --allow     - to pass-through particular unknown properties
+     --allow-any - to pass-through all unknown properties
 
 0.1.0  2022-06-21T10:47:51+12:00
    - Uploaded to zef ecosystem
