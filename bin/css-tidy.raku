@@ -41,7 +41,7 @@ subset ModuleOpt of Str:D where .lc ~~ 'css1'|'css21'|'css3'|'svg';
 sub MAIN($file = '-',              #= Input CSS Stylesheet path ('-' for stdin)
          $output?,                 #= Processed stylesheet path (stdout)
          Str :$base-url = $file eq '-' ?? './' !! $file;
-         Bool :$atomize      ,     #= Break into component properties
+         Bool :$atomize,           #= Break into component properties
          Bool :$imports = False,   #= Expand imported stylesheets
          Bool :$pretty = False,    #= Multi line property output
          Bool :$warn = True,       #= Output warnings
