@@ -119,12 +119,12 @@ multi method load(:ruleset($ast)!) {
 
 multi method load($_) is default { warn .raku }
 
-multi method parse(CSS::Stylesheet:U: $str!, Bool :$lax, Bool :$warn = True, |c) {
-    self.new(|c).parse($str, :$lax, :$warn);
+multi method parse(CSS::Stylesheet:U: $str!, Bool :$lax, Bool :$warn = True, Bool :$xml, |c) {
+    self.new(|c).parse($str, :$lax, :$warn, :$xml);
 }
-multi method parse(CSS::Stylesheet:D: Str:D() $str!, Bool :$*lax, Bool :$*warn = True, CSS::Module :$module) {
+multi method parse(CSS::Stylesheet:D: Str:D() $str!, Bool :$*lax, Bool :$*warn = True, Bool :$xml, CSS::Module :$module) {
     $!module = $_ with $module;
-    my $actions = $!module.actions.new: :$*lax;
+    my $actions = $!module.actions.new: :$*lax, :$xml;
     given $!module.parse($str, :rule<stylesheet>, :$actions) {
         @!warnings.append: $actions.warnings;
         if $*warn {

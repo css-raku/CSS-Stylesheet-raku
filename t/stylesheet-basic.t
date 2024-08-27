@@ -3,7 +3,7 @@ use Test;
 use CSS::Stylesheet;
 use CSS::Media;
 use CSS::Units :px;
-plan 7;
+plan 8;
 
 my $css = q:to<END>;
  @charset "utf-8";
@@ -18,10 +18,10 @@ my $css = q:to<END>;
  html, body, p, th, td, li, dd, dt {
    font: 1em Arial, Helvetica, sans-serif;
  }
- h1, h2, h3, h4, h5, h6 {
+ H1, h2, h3, h4, h5, h6 {
    font-family: Arial, Helvetica, sans-serif;
  }
- h1 { font-size: 2em; }
+ H1 { font-size: 2em; }
  h2 { font-size: 1.5em; }
  h3 { font-size: 1.2em ; }
  h4 { font-size: 1.0em; }
@@ -42,4 +42,7 @@ is $stylesheet.rules[0].Str, 'html, body { background:white; border:0; color:bla
 is $stylesheet.rules[1].properties, "font:em Arial, Helvetica, sans-serif;";
 is $stylesheet.rules.[3].xpath, '//h1';
 is $stylesheet.rules.tail.xpath, "//a[link-pseudo('active', .)]";
+$stylesheet = CSS::Stylesheet.parse($css, :$media, :xml);
+is $stylesheet.rules.[3].xpath, '//H1', ':xml parse mode';
+
 done-testing();
