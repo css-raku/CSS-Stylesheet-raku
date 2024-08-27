@@ -2,6 +2,10 @@ Revision history for CSS-Stylesheet
 
 {{$NEXT}}
 
+0.1.2  2024-08-28T08:49:36+12:00
+   - Add parse(:xml) option for case sensitive parsing and handling
+     of properties
+
 0.1.1  2022-09-07T07:27:19+12:00
    - Add css-tidy.raku options:
      --allow     - to pass-through particular unknown properties
