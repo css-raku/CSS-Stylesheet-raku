@@ -12,7 +12,7 @@ class CSS::MediaQuery
 ```raku
 method parse(
     Str:D $media-query,
-    :$module = Code.new,
+    CSS::Module :$module = Code.new,
     |c
 ) returns CSS::MediaQuery
 ```

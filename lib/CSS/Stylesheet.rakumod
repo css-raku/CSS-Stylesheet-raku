@@ -248,6 +248,7 @@ method parse(
     Str $stylesheet,      # stylesheet to parse
     CSS::Module :$module, # CSS version to use (default CSS::Module::CSS3
     Bool :$warn = True,   # display parse warnings
+    Bool :$xml,           # XML semantics (case sensitive)
 ) returns CSS::Stylesheet
 =end code
 Parses an existing CSS style-sheet.
