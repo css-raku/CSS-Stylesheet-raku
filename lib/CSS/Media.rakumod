@@ -1,7 +1,7 @@
 #| CSS Media representation
 unit class CSS::Media;
 use CSS::Properties :&from-ast;
-use CSS::Units :Resolution, :Length, :dpi;
+use CSS::Units :Resolution, :Length, :dpi, :px;
 use CSS::Module::CSS3;
 use CSS::MediaQuery;
 
@@ -12,8 +12,8 @@ subset MediaOrientation of Str is export(:MediaOrientation) where 'portrait'|'la
 
 has MediaType $.type is required handles<Str>;
 has MediaRes $.resolution = 96dpi;
-has MediaLen $.width is required;
-has MediaLen $.height is required;
+has MediaLen $.width = 1024px;
+has MediaLen $.height = 768px;
 has MediaLen $.device-width;
 has MediaLen $.device-height;
 has UInt $.color = 8;
@@ -148,7 +148,7 @@ multi method query(:media-query(@)! (% ( :keyw($_)! ), $media)) {
     default { fail "unhandled media selection prefix $_"; }
 }
 
-multi method query( :media(%)! ( :$ident! ) ) {
+multi method query( :media(%)! ( :$ident ) ) {
     $ident ~~ $!type | 'all'
 }
 
@@ -157,7 +157,7 @@ multi method query( :$keyw!) {
 }
 
 multi method query(:media-query(@)! ($media, *@expr)) {
-     $.query(:$media) && ! @expr.first({ ! $.query(|$_) });
+    $.query(:$media) && ! @expr.first({ ! $.query(|$_) });
 }
 
 multi method query(:@media-list!) {
