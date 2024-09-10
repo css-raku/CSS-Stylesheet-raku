@@ -106,13 +106,12 @@ multi method at-rule($rule, |c) {
     warn "ignoring \@$rule \{...\}";
 }
 
-multi method load(:at-rule($_)!, |c) {
-    my Str:D $type = .<at-keyw>:delete;
-    $.at-rule: $type, |$_, |c;
+multi method load(:at-rule(%)! ( Str:D :at-keyw($type)!, *%ast ), |c) {
+    $.at-rule: $type, |%ast, |c;
 }
 
-multi method load(:ruleset($ast)!) {
-    my CSS::Ruleset $rule .= new: :$ast, :$!module, :media-query($!scope);
+multi method load(:ruleset(%ast)!) {
+    my CSS::Ruleset $rule .= new: :%ast, :$!module, :media-query($!scope);
     %!rule-media{$rule} = $_ with $!scope;
     @!rules.push: $rule;
 }
