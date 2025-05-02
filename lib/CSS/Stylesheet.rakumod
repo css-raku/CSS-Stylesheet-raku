@@ -8,7 +8,6 @@ use CSS::MediaQuery;
 use CSS::Media;
 use CSS::Module:CSS3;
 use CSS::Ruleset;
-use CSS::Grammar::Actions;
 use CSS::Writer;
 use Method::Also;
 use URI;
@@ -68,8 +67,8 @@ multi method at-rule('media', :@media-list, :@rule-list) {
     }
 }
 
-multi method at-rule('page', Str :$pseudo-class, List :$declarations) {
-    @!at-pages.push: CSS::AtPageRule.new: :$pseudo-class, :$declarations;
+multi method at-rule('page', Str :$pseudo-class, :@declarations) {
+    @!at-pages.push: CSS::AtPageRule.new: :$pseudo-class, :@declarations;
 }
 
 multi method at-rule('font-face', :declarations(@ast)!) {
