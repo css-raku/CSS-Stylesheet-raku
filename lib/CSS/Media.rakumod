@@ -1,6 +1,6 @@
 #| CSS Media representation
 unit class CSS::Media;
-use CSS::Properties :&from-ast;
+use CSS::Properties::Util :&from-ast;
 use CSS::Units :Resolution, :Length, :dpi, :px;
 use CSS::Module::CSS3;
 use CSS::MediaQuery;

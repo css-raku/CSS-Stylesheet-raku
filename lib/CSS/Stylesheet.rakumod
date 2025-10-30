@@ -313,7 +313,7 @@ Returns an array of all the style sheet's `@page` at-rules.
 =head2 See Also
 =head3 L<CSS::PageBox>
 
-L<CSS::PageBox> (from the CSS::Properties distrubution) is able to create
+L<CSS::PageBox> (from the CSS::Properties distribution) is able to create
 a correctly sized page using `@page` properties as in the following example:
 
 =begin code :lang<raku>
