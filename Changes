@@ -1,6 +1,8 @@
 Revision history for CSS-Stylesheet
 
 {{$NEXT}}
+
+0.1.4  2025-10-31T11:00:02+13:00
    - Adjust to CSS::Properties 0.10.2+. &from-ast has been moved
      from CSS::Properties to CSS::Properties::Util
 
