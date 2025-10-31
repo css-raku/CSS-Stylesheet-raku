@@ -13,7 +13,7 @@ has CSS::Properties() $.properties;
 has CSS::MediaQuery() $.media-query; # associated media (raw AST only)
 
 submethod TWEAK(:%ast is copy, :selectors($), :properties($), :media-query($), |c) {
-    %ast = $_ with %ast<ruleset>;
+    %ast = %$_ with %ast<ruleset>;
     $!properties .= new: :ast($_), |c
        with %ast<declarations>:delete;
     $!selectors .= new: :%ast, |c
