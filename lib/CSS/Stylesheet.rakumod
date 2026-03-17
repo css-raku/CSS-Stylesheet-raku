@@ -93,7 +93,10 @@ multi method at-rule('import', Str:D :$url!, :@media-list) {
             my CSS::URI $uri .= new: :$url, :$!base-url;
             temp $!scope = $media-query;
             temp $!base-url = $uri.url.directory();
-            self.parse($_) with $uri.get;
+            try {
+                CATCH { default { warn $_ } }
+                self.parse($_) with $uri.get;
+            }
         }
         else {
             warn X::CSS::Ignored.new(:str<@import>, :message('ignored'), :explanation('use :imports to enable'));
