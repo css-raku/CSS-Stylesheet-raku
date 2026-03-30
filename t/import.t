@@ -28,7 +28,7 @@ $css = q:to<END>;
   }
   END
 
-$stylesheet .= new(:imports).parse($css);
+quietly $stylesheet .= new(:imports).parse($css);
 is-deeply $stylesheet.Str.lines, (
       '@media screen { h2 { color:green; } }',
       '@media print { h2 { color:blue; } }',
