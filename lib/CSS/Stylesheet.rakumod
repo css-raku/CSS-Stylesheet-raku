@@ -28,6 +28,7 @@ has CSS::Font::Descriptor %!font-face;
 has URI() $.base-url = './';
 has Bool $.imports;
 has Str $.font-family = 'times-roman';
+has Bool $.xml = False;
 
 method font-sources($font, |c) {
     CSS::Font::Resources.sources: :$font, :$!base-url, :@!font-face, :$!font-family, |c;
@@ -231,7 +232,7 @@ method Str(:$optimize = True, Bool :$pretty = False, *%opt) is also<gist> {
     my Pair $ast = self.ast: :$optimize;
     %opt<color-names> //= True
         unless %opt<color-masks> || %opt<color-values>;
-    my CSS::Writer $writer .= new: :$pretty, |%opt;
+    my CSS::Writer $writer .= new: :$!xml, :$pretty, |%opt;
     $writer.write: $ast;
 }
 
